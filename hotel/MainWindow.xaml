@@ -5,35 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:hotel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowStyle="SingleBorderWindow" AllowsTransparency="False" Background="Transparent">
+        Title="MainWindow" Height="450" Width="800" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
     <Window.Clip>
         <RectangleGeometry Rect="0,0,800,450" RadiusX="25" RadiusY="25"/>
     </Window.Clip>
     <Border Background="#1a1c21" CornerRadius="25">
         <Grid>
-            <Grid HorizontalAlignment="Left" Width="50">
+            <Grid HorizontalAlignment="Left" Width="100">
                 <Border Background="#272B2F" CornerRadius="20,0,0,20"/>
-                <StackPanel Margin="0,100,0,0">
-                    <Button Content="Kunden" Click="btn_kunden" Background="#212020" Foreground="White">
-                        <Button.Resources>
-                            <Style TargetType="Border">
+                <StackPanel Margin="0,100,0,0" Width="100">
+                    
+                    <Button Content="Kunden" Click="btn_kunden" Foreground="White" Margin="0,0,0,5" Height="25">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#212020"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        
-                                        <Setter Property="Background" Value="White"/>
+                                        <Setter Property="Background" Value="#FF2967FF"/> <!--ändert die farbe beim drüberhovern -->
+                                        <Setter Property="Foreground" Value="#212020"/>
                                     </Trigger>
                                 </Style.Triggers>
-                                <Setter Property="CornerRadius" Value="5"/>
                             </Style>
-                        </Button.Resources>
+                        </Button.Style>
                     </Button>
 
-                    <Button Content="Zimmer" Click="btn_zimmer"  Background="#212020" Foreground="White">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="5"/>
+                    <Button Content="Zimmer" Click="btn_zimmer" Foreground="White" Height="25">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#212020"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF2967FF"/> <!--ändert die farbe beim drüberhovern -->
+                                        <Setter Property="Foreground" Value="#212020"/>
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
-                        </Button.Resources>
+                        </Button.Style>
                     </Button>
                     
                 </StackPanel>
