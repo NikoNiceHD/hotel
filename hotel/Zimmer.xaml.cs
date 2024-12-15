@@ -16,23 +16,13 @@ using System.Windows.Shapes;
 namespace hotel
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaktionslogik für Page2.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Page2 : Page
     {
-        public MainWindow()
+        public Page2()
         {
             InitializeComponent();
-        }
-
-        private void btn_kunden(object sender, RoutedEventArgs e)
-        {
-            main.Content = new Page1();
-        }
-
-        private void btn_zimmer(object sender, RoutedEventArgs e)
-        {
-            main.Content = new Page2();
         }
     }
 }
