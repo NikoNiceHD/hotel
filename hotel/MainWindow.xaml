@@ -5,12 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:hotel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Width="50">
-            <Button Content="Kunden" Click="btn_kunden"/>
-            <Button Content="Zimmer" Click="btn_zimmer"/>
-        </StackPanel>
-        <Frame x:Name="main" Width="750" Margin="50,0,0,0"/>
-    </Grid>
+        Title="MainWindow" Height="450" Width="800" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Window.Clip>
+        <RectangleGeometry Rect="0,0,800,450" RadiusX="25" RadiusY="25"/>
+    </Window.Clip>
+    <Border Background="#1a1c21" CornerRadius="25">
+        <Grid>
+            <Grid HorizontalAlignment="Left" Width="50">
+                <Border Background="#272B2F" CornerRadius="20,0,0,20"/>
+                <StackPanel Margin="0,100,0,0">
+                    <Button Content="Kunden" Click="btn_kunden" Background="#212020" Foreground="White">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                    <Button Content="Zimmer" Click="btn_zimmer"  Background="#212020" Foreground="White">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    
+                </StackPanel>
+            </Grid>
+            <Frame x:Name="main" Width="750" Margin="50,0,0,0"/>
+        </Grid>
+    </Border>
 </Window>
