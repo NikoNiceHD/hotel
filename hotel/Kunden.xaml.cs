@@ -27,6 +27,7 @@ namespace hotel
         string ort;
         string straße_hausnummer;
         DateTime einzugsdatum;
+        DateTime altgenug;
 
         public Page1()
         {
@@ -35,7 +36,7 @@ namespace hotel
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(textbox_vorname.Text) || string.IsNullOrEmpty(textbox_nachname.Text) || geburtstag == null || string.IsNullOrEmpty(textbox_plz.Text) || string.IsNullOrEmpty(textbox_ort.Text) || string.IsNullOrEmpty(textbox_strasse_hausnummer.Text) || einzugsdatum == null)
+            if (string.IsNullOrEmpty(textbox_vorname.Text) || string.IsNullOrEmpty(textbox_nachname.Text) || datepicker_geburtstag.SelectedDate == null || string.IsNullOrEmpty(textbox_plz.Text) || string.IsNullOrEmpty(textbox_ort.Text) || string.IsNullOrEmpty(textbox_strasse_hausnummer.Text) || datepicker_einzugsdatum.SelectedDate == null)
             {
                 vorname = textbox_vorname.Text;
                 nachname = textbox_nachname.Text;
@@ -57,6 +58,16 @@ namespace hotel
                 plz = Convert.ToInt32(textbox_plz.Text);
             }
 
+            altgenug = DateTime.Now.AddYears(-18);
+
+            if(datepicker_geburtstag.SelectedDate > altgenug)
+            {
+                MessageBox.Show("sie müssen mindestens 18 jahre alt sein um ein zimmer buchen zu können");
+                
+            }else if (datepicker_einzugsdatum.SelectedDate < DateTime.Now.AddDays(-1))
+            {
+                MessageBox.Show("es können keine zimmer in der vergangenheit gebucht werden");
+            }
 
         }
     }
