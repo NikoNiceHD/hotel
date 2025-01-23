@@ -27,12 +27,19 @@ namespace hotel
 
         private void btn_kunden(object sender, RoutedEventArgs e)
         {
-            main.Content = new Page1();
+            main.Content = new Kunden();
         }
 
         private void btn_zimmer(object sender, RoutedEventArgs e)
         {
-            main.Content = new Page2();
+            main.Content = new Zimmer();
         }
+
+        private void btn_rechnug(object sender, RoutedEventArgs e)
+        {
+            main.Content = new Rechnungen();
+        }
+
+        
     }
 }

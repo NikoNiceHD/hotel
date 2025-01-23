@@ -18,7 +18,7 @@ namespace hotel
     /// <summary>
     /// Interaktionslogik für Page1.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class Kunden : Page
     {
         string vorname;
         string nachname;
@@ -29,7 +29,7 @@ namespace hotel
         DateTime einzugsdatum;
         DateTime altgenug;
 
-        public Page1()
+        public Kunden()
         {
             InitializeComponent();
         }
