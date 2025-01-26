@@ -13,32 +13,7 @@
         <Grid>
             <Grid HorizontalAlignment="Left" Width="100">
                 <Border Background="#272B2F" CornerRadius="20,0,0,20">
-                    <Button Content="Rechnung" Click="btn_rechnug" Foreground="White" Margin="0,164,0,245">
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}">
-                                <Setter Property="Background" Value="#212020"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Padding" Value="0,0,0,0"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type Button}">
-                                            <Border Background="{TemplateBinding Background}" CornerRadius="5">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#FF2967FF"/>
-                                        <!--ändert die farbe beim drüberhovern -->
-                                        <Setter Property="Foreground" Value="#212020"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+
                 </Border>
                 <StackPanel Margin="0,100,0,0" Width="100">
 
@@ -69,7 +44,7 @@
                         </Button.Style>
                     </Button>
 
-                    <Button Content="Zimmer" Click="btn_zimmer" Foreground="White" Height="25">
+                    <Button Content="Zimmer" Click="btn_zimmer" Foreground="White" Height="25" Margin="0,0,0,5">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="#212020"/>
@@ -95,10 +70,62 @@
                             </Style>
                         </Button.Style>
                     </Button>
-
+                    <Button Content="Rechnung" Click="btn_rechnug" Foreground="White" Height="25" Margin="0,0,0,5">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Background" Value="#212020"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF2967FF"/>
+                                        <!--ändert die farbe beim drüberhovern -->
+                                        <Setter Property="Foreground" Value="#212020"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="Buchungen" Click="btn_buchung" Foreground="White" Height="25">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Background" Value="#212020"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF2967FF"/>
+                                        <!--ändert die farbe beim drüberhovern -->
+                                        <Setter Property="Foreground" Value="#212020"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
+
             </Grid>
-            <Frame x:Name="main" Margin="100,0,0,0" Navigated="main_Navigated"/>
+            <Frame x:Name="main" Margin="100,0,0,0"/>
         </Grid>
     </Border>
 </Window>

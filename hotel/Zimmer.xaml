@@ -9,11 +9,11 @@
       Title="Page2">
 
     <Grid Background="White">
-        <TextBox HorizontalAlignment="Left" Margin="53,183,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="270,183,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="37,123,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="254,123,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <Button Content="Button" HorizontalAlignment="Left" Margin="323,325,0,0" VerticalAlignment="Top"/>
-        <Label Content="Zimmer ID" HorizontalAlignment="Left" Margin="47,152,0,0" VerticalAlignment="Top"/>
-        <Label Content="Gebäude ID" HorizontalAlignment="Left" Margin="270,152,0,0" VerticalAlignment="Top"/>
+        <Label Content="Zimmer ID" HorizontalAlignment="Left" Margin="31,92,0,0" VerticalAlignment="Top"/>
+        <Label Content="Gebäude ID" HorizontalAlignment="Left" Margin="254,92,0,0" VerticalAlignment="Top"/>
         <ComboBox HorizontalAlignment="Left" Margin="549,141,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox HorizontalAlignment="Left" Margin="549,179,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox HorizontalAlignment="Left" Margin="549,225,0,0" VerticalAlignment="Top" Width="120"/>
