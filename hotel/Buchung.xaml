@@ -9,12 +9,13 @@
       Title="Buchung">
 
     <Grid Background="White">
+        <Frame x:Name="buchung"/>
         <ComboBox HorizontalAlignment="Left" Margin="295,118,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox HorizontalAlignment="Left" Margin="295,191,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Content="Rechnungs ID" HorizontalAlignment="Left" Margin="295,87,0,0" VerticalAlignment="Top"/>
         <Label Content="Zimmer ID" HorizontalAlignment="Left" Margin="295,160,0,0" VerticalAlignment="Top"/>
         <DatePicker HorizontalAlignment="Left" Margin="291,270,0,0" VerticalAlignment="Top"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="335,350,0,0" VerticalAlignment="Top"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="335,350,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Label Content="Datum" HorizontalAlignment="Left" Margin="295,239,0,0" VerticalAlignment="Top"/>
 
     </Grid>

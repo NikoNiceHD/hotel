@@ -20,9 +20,16 @@ namespace hotel
     /// </summary>
     public partial class Buchung : Page
     {
+        
         public Buchung()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigiere zu Page1 und ersetze die aktuelle Seite
+            this.NavigationService.Navigate(new Page1());
         }
     }
 }
