@@ -15,7 +15,12 @@ namespace hotel
         public Kunden_bearbeiten()
         {
             InitializeComponent();
-            LoadData("SELECT * FROM azanik.kunde"); // Lade alle Kunden beim Start
+            LoadData("Select kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, adresse.strasse, adresse.plz, kunde_hat_adresse.datum AS Einzugsdatum, plz.ort FROM kunde " +
+                "INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id " +
+                "INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id " +
+                "INNER JOIN plz ON plz.plz = adresse.plz; " 
+              // Lade alle Kunden beim Start
+            ); // Lade alle Kunden beim Start
         }
 
         // Methode zum Laden der Daten in das DataGrid
@@ -38,7 +43,7 @@ namespace hotel
             }
         }
 
-        // Suchfunktion bei Drücken der Enter-Taste
+        // Suchfunktion bei Drücken der Enter-Taste  WHERE vorname LIKE '%{search}%' OR nachname LIKE '%{search}%'
         private void SearchTextBox(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -47,13 +52,25 @@ namespace hotel
 
                 if (!string.IsNullOrEmpty(search))
                 {
-                    string query = $"SELECT * FROM azanik.kunde WHERE vorname LIKE '%{search}%' OR nachname LIKE '%{search}%'";
+                    string query = @"SELECT kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, adresse.strasse, adresse.plz, 
+                        kunde_hat_adresse.datum AS Einzugsdatum, plz.ort 
+                 FROM kunde 
+                 INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id 
+                 INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id
+                 INNER JOIN plz ON plz.plz = adresse.plz
+                 WHERE kunde.vorname LIKE '%" + search + "%' OR kunde.nachname LIKE '%" + search + "%';";
+
                     LoadData(query);
                 }
                 else
                 {
                     MessageBox.Show("Bitte geben Sie einen Suchbegriff ein.");
-                    LoadData("SELECT * FROM azanik.kunde"); // Lade alle Daten, wenn die Suche leer ist
+                    LoadData(@"SELECT kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, adresse.strasse, adresse.plz, 
+                        kunde_hat_adresse.datum AS Einzugsdatum, plz.ort 
+                 FROM kunde 
+                 INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id 
+                 INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id
+                 INNER JOIN plz ON plz.plz = adresse.plz;"); // Lade alle Daten, wenn die Suche leer ist
                 }
             }
         }

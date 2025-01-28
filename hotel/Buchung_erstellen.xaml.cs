@@ -16,23 +16,13 @@ using System.Windows.Shapes;
 namespace hotel
 {
     /// <summary>
-    /// Interaktionslogik für Page2.xaml
+    /// Interaktionslogik für Buchung_erstellen.xaml
     /// </summary>
-    public partial class Zimmer : Page
+    public partial class Buchung_erstellen : Page
     {
-        public Zimmer()
+        public Buchung_erstellen()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            zimmer.Navigate(new Zimmer_eintragen());
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            zimmer.Navigate(new Zimmer_einsehen());
         }
     }
 }
