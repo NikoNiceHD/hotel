@@ -6,18 +6,13 @@
       xmlns:local="clr-namespace:hotel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Page1">
+      Title="Buchung">
 
     <Grid Background="White">
-        <!-- Suchfeld -->
         <TextBox x:Name="searchTextBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" KeyDown="SearchTextBox"/>
 
-        <!-- DataGrid -->
-        <DataGrid x:Name="dtgrid" Margin="0,54,0,181" ItemsSource="{Binding}" AutoGenerateColumns="True"/>
+        <DataGrid x:Name="dtgrid" Margin="0,54,0,181" ItemsSource="{Binding}" AutoGenerateColumns="True" MouseDoubleClick="DataGrid_MouseDoubleClick"/>
 
-        <!-- Button zum Laden der Daten -->
         <Button Content="Daten laden" HorizontalAlignment="Left" Margin="360,304,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-
-        <!-- Button zum Speichern der Änderungen -->
     </Grid>
 </Page>

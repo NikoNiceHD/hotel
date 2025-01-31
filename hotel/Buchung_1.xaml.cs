@@ -10,15 +10,14 @@ namespace hotel
     public partial class Buchung : Page
     {
         string connectstring = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
-        private DataTable dataTable; // Datenquelle für das DataGrid
+        private DataTable dataTable; 
 
         public Buchung()
         {
             InitializeComponent();
-            LoadData("SELECT * FROM azanik.kunde"); // Lade alle Kunden beim Start
+            LoadData("SELECT * FROM azanik.kunde"); 
         }
 
-        // Methode zum Laden der Daten in das DataGrid
         private void LoadData(string query)
         {
             try
@@ -29,7 +28,7 @@ namespace hotel
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
-                    dtgrid.DataContext = dataTable; // Binde die Daten an das DataGrid
+                    dtgrid.DataContext = dataTable; 
                 }
             }
             catch (Exception ex)
@@ -38,7 +37,7 @@ namespace hotel
             }
         }
 
-        // Suchfunktion bei Drücken der Enter-Taste
+
         private void SearchTextBox(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -53,19 +52,30 @@ namespace hotel
                 else
                 {
                     MessageBox.Show("Bitte geben Sie einen Suchbegriff ein.");
-                    LoadData("SELECT * FROM azanik.kunde"); // Lade alle Daten, wenn die Suche leer ist
+                    LoadData("SELECT * FROM azanik.kunde"); 
                 }
             }
         }
 
-        // Methode zum Laden der Daten (wird vom Button "Daten laden" aufgerufen)
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoadData("SELECT * FROM azanik.kunde");
         }
 
-        // Methode zum Speichern der Änderungen in die Datenbank
-       
-            
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (dtgrid.SelectedItem != null)
+            {
+                DataRowView selectedRow = dtgrid.SelectedItem as DataRowView;
+
+                if (selectedRow != null)
+                {
+                    int kundenID = Convert.ToInt32(selectedRow["id"]); 
+
+                    Buchung_erstellen buchung_erstellen = new Buchung_erstellen(kundenID);
+                    this.NavigationService.Navigate(buchung_erstellen);
+                }
+            }
+        }
     }
 }
