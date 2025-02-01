@@ -5,19 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:hotel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowStyle="SingleBorderWindow" AllowsTransparency="False" Background="Transparent">
+        Title="MainWindow" Height="800" Width="1000" WindowStyle="SingleBorderWindow" AllowsTransparency="False" Background="Transparent">
     <Window.Clip>
-        <RectangleGeometry Rect="0,0,800,450" RadiusX="25" RadiusY="25"/>
+        <RectangleGeometry Rect="0,0,1000,800" RadiusX="25" RadiusY="25"/>
     </Window.Clip>
     <Border Background="#1a1c21" CornerRadius="25">
         <Grid>
             <Grid HorizontalAlignment="Left" Width="100">
-                <Border Background="#272B2F" CornerRadius="20,0,0,20">
+                <Border Background="#272B2F" CornerRadius="20,0,0,20" Margin="0,0,-40,0">
 
                 </Border>
-                <StackPanel Margin="0,100,0,0" Width="100">
+                <StackPanel Margin="0,100,-40,0">
 
-                    <Button Content="Kunden" Click="btn_kunden" Foreground="White" Margin="0,0,0,5" Height="25">
+                    <Button Content="Kunden" Click="btn_kunden" Foreground="White" Margin="0,0,0,5" Height="40" Width="140">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="#212020"/>
@@ -44,7 +44,7 @@
                         </Button.Style>
                     </Button>
 
-                    <Button Content="Zimmer" Click="btn_zimmer" Foreground="White" Height="25" Margin="0,0,0,5">
+                    <Button Content="Zimmer" Click="btn_zimmer" Foreground="White" Height="40" Width="140" Margin="0,0,0,5">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="#212020"/>
@@ -70,7 +70,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button Content="Buchungen" Click="btn_buchung" Foreground="White" Height="25">
+                    <Button Content="Buchungen" Click="btn_buchung" Foreground="White" Height="40" Width="140">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Background" Value="#212020"/>
@@ -99,7 +99,7 @@
                 </StackPanel>
 
             </Grid>
-            <Frame x:Name="main" Margin="100,0,0,0"/>
+            <Frame x:Name="main" Margin="140,0,0,0"/>
         </Grid>
     </Border>
 </Window>

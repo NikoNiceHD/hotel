@@ -33,8 +33,9 @@ namespace hotel
             startDatumTextBlock.Text = $"Startdatum: {startDatum.ToShortDateString()}";
             endDatumTextBlock.Text = $"Enddatum: {endDatum.ToShortDateString()}";
 
-            // Lade verfügbare Zimmer
+            // Lade verfügbare Zimmer und Leistungen
             LadeVerfuegbareZimmer();
+            LadeLeistungen();
         }
 
         // Methode zum Laden der verfügbaren Zimmer
@@ -81,6 +82,16 @@ namespace hotel
             }
         }
 
+        // Methode zum Laden der verfügbaren Leistungen
+        private void LadeLeistungen()
+        {
+            Leistungen leistungenService = new Leistungen();
+            List<Leistungen.LeistungViewModel> leistungen = leistungenService.LadeLeistungen();
+
+            // Binde die Leistungen an die ListView
+            leistungenListView.ItemsSource = leistungen;
+        }
+
         // Event-Handler für die Auswahl von Zimmern
         private void ZimmerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -112,13 +123,27 @@ namespace hotel
 
                 if (rechnungsID > 0)
                 {
+                    // Liste für Buchungs-IDs
+                    List<int> buchungsIDs = new List<int>();
+
                     // Buchung für jedes ausgewählte Zimmer erstellen
                     foreach (int zimmernummer in ausgewaehlteZimmer)
                     {
-                        erstelleBuchung(zimmernummer, rechnungsID);
+                        int buchungID = erstelleBuchung(zimmernummer, rechnungsID);
+
+                        if (buchungID > 0)
+                        {
+                            buchungsIDs.Add(buchungID);
+                        }
                     }
 
-                    MessageBox.Show($"{ausgewaehlteZimmer.Count} Zimmer erfolgreich gebucht!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Speichere die ausgewählten Leistungen für jede Buchung
+                    foreach (int buchungID in buchungsIDs)
+                    {
+                        SpeichereLeistungen(buchungID);
+                    }
+
+                    MessageBox.Show($"{ausgewaehlteZimmer.Count} Zimmer und {anzahlAusgewaehlteLeistungen()} Leistungen erfolgreich gebucht!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
@@ -129,6 +154,47 @@ namespace hotel
             {
                 MessageBox.Show("Bitte wählen Sie mindestens ein Zimmer aus.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        // Methode zum Speichern der ausgewählten Leistungen
+        private void SpeichereLeistungen(int buchungID)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    foreach (Leistungen.LeistungViewModel leistung in leistungenListView.ItemsSource)
+                    {
+                        if (leistung.IsSelected)
+                        {
+                            string insertLeistungQuery = @"
+                        INSERT INTO buchung_hat_leistung (buchung_id, leistung_id)
+                        VALUES (@buchungID, @leistungID);";
+
+                            MySqlCommand cmd = new MySqlCommand(insertLeistungQuery, connection);
+                            cmd.Parameters.AddWithValue("@buchungID", buchungID);
+                            cmd.Parameters.AddWithValue("@leistungID", leistung.LeistungID);
+
+                            cmd.ExecuteNonQuery();
+
+                            // Debug-Ausgabe
+                            MessageBox.Show($"Leistung {leistung.LeistungName} erfolgreich hinzugefügt.", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Fehler beim Speichern der Leistungen: " + ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        // Methode zum Zählen der ausgewählten Leistungen
+        private int anzahlAusgewaehlteLeistungen()
+        {
+            return leistungenListView.ItemsSource.Cast<Leistungen.LeistungViewModel>().Count(leistung => leistung.IsSelected);
         }
 
         // Methode zum Erstellen der Rechnung
@@ -168,7 +234,7 @@ namespace hotel
         }
 
         // Methode zum Erstellen der Buchung für ein einzelnes Zimmer
-        private void erstelleBuchung(int zimmernummer, int rechnungsID)
+        private int erstelleBuchung(int zimmernummer, int rechnungsID)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -183,30 +249,39 @@ namespace hotel
                         {
                             // Buchung in die Tabelle `buchung` einfügen
                             string insertBuchungQuery = @"
-                                INSERT INTO buchung (datum, rechnung_id, zimmer_id)
-                                VALUES (@datum, @rechnungsID, @zimmernummer);";
+                        INSERT INTO buchung (datum, rechnung_id, zimmer_id)
+                        VALUES (@datum, @rechnungsID, @zimmernummer);
+                        SELECT LAST_INSERT_ID();";
 
                             MySqlCommand buchungCmd = new MySqlCommand(insertBuchungQuery, connection, transaction);
                             buchungCmd.Parameters.AddWithValue("@datum", startDatum); // Verwende das Startdatum
                             buchungCmd.Parameters.AddWithValue("@rechnungsID", rechnungsID);
                             buchungCmd.Parameters.AddWithValue("@zimmernummer", zimmernummer);
 
-                            buchungCmd.ExecuteNonQuery();
+                            // Führe den Befehl aus und hole die Buchungs-ID
+                            int buchungID = Convert.ToInt32(buchungCmd.ExecuteScalar());
 
                             // Transaktion erfolgreich abschließen
                             transaction.Commit();
+
+                            // Debug-Ausgabe
+                            MessageBox.Show($"Buchung für Zimmer {zimmernummer} erfolgreich erstellt. Buchungs-ID: {buchungID}", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                            return buchungID;
                         }
                         catch (Exception ex)
                         {
                             // Transaktion zurückrollen, falls ein Fehler auftritt
                             transaction.Rollback();
                             MessageBox.Show($"Fehler beim Buchen des Zimmers {zimmernummer}: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return -1;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Fehler bei der Verbindung zur Datenbank: " + ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return -1;
                 }
             }
         }

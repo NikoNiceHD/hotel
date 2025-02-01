@@ -12,7 +12,5 @@
         <TextBox x:Name="searchTextBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" KeyDown="SearchTextBox"/>
 
         <DataGrid x:Name="dtgrid" Margin="0,54,0,181" ItemsSource="{Binding}" AutoGenerateColumns="True" MouseDoubleClick="DataGrid_MouseDoubleClick"/>
-
-        <Button Content="Daten laden" HorizontalAlignment="Left" Margin="360,304,0,0" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 </Page>
