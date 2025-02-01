@@ -17,9 +17,10 @@
                     <TextBlock x:Name="startDatumTextBlock" FontSize="20" TextAlignment="Center"/>
                     <TextBlock x:Name="endDatumTextBlock" FontSize="20" TextAlignment="Center"/>
 
-                    <DataGrid x:Name="zimmerDataGrid" Width="600" Height="200" AutoGenerateColumns="True" SelectionChanged="ZimmerDataGrid_SelectionChanged"/>
-
-                    <Button Content="Zimmer auswählen" Width="200" Click="ZimmerAuswaehlen_Click"/>
+                <DataGrid x:Name="zimmerDataGrid" Width="600" Height="200" AutoGenerateColumns="True" 
+                                SelectionMode="Extended" SelectionUnit="FullRow" 
+                                SelectionChanged="ZimmerDataGrid_SelectionChanged" Margin="0,0,0,20"/>
+                <Button Content="Zimmer auswählen" Width="200" Click="ZimmerAuswaehlen_Click"/>
                 </StackPanel>
             </Grid>
         

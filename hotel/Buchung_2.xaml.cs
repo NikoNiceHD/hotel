@@ -44,52 +44,9 @@ namespace hotel
                 return;
             }
 
-            int rechnungsID = ErstelleRechnung(startDatum, endDatum);
-
-            if (rechnungsID > 0)
-            {
-                Buchung_3 buchung3Page = new Buchung_3(kundenID, startDatum, endDatum, rechnungsID);
-                this.NavigationService.Navigate(buchung3Page);
-            }
-            else
-            {
-                MessageBox.Show("Fehler beim Erstellen der Rechnung.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private int ErstelleRechnung(DateTime startDatum, DateTime endDatum)
-        {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    string insertRechnungQuery = @"
-                        INSERT INTO rechnung (anfang, ende, kunden_id)
-                        VALUES (@startDatum, @endDatum, @kundenID);
-                        SELECT LAST_INSERT_ID();";
-
-                    MySqlCommand rechnungCmd = new MySqlCommand(insertRechnungQuery, connection);
-                    rechnungCmd.Parameters.AddWithValue("@startDatum", startDatum);
-                    rechnungCmd.Parameters.AddWithValue("@endDatum", endDatum);
-                    rechnungCmd.Parameters.AddWithValue("@kundenID", kundenID);
-
-                    int rechnungsID = Convert.ToInt32(rechnungCmd.ExecuteScalar());
-                    return rechnungsID;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Fehler beim Erstellen der Rechnung: " + ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return -1;
-                }
-                finally
-                {
-                    if (connection.State == System.Data.ConnectionState.Open)
-                    {
-                        connection.Close();
-                    }
-                }
-            }
+            // Navigiere zur Buchung_3-Seite
+            Buchung_3 buchung3Page = new Buchung_3(kundenID, startDatum, endDatum);
+            this.NavigationService.Navigate(buchung3Page);
         }
     }
 }

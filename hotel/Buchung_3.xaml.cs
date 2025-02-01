@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MySqlConnector;
@@ -11,19 +13,20 @@ namespace hotel
         private int kundenID;
         private DateTime startDatum;
         private DateTime endDatum;
-        private int rechnungsID; // Rechnungs-ID, die von Buchung_2 übergeben wird
 
         // Verbindungszeichenfolge zur MySQL-Datenbank
         private string connectionString = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
 
-        // Konstruktor, der die Kunden-ID, Startdatum, Enddatum und Rechnungs-ID empfängt
-        public Buchung_3(int kundenID, DateTime startDatum, DateTime endDatum, int rechnungsID)
+        // Liste für ausgewählte Zimmer
+        private List<int> ausgewaehlteZimmer = new List<int>();
+
+        // Konstruktor, der die Kunden-ID, Startdatum und Enddatum empfängt
+        public Buchung_3(int kundenID, DateTime startDatum, DateTime endDatum)
         {
             InitializeComponent();
             this.kundenID = kundenID;
             this.startDatum = startDatum;
             this.endDatum = endDatum;
-            this.rechnungsID = rechnungsID;
 
             // Zeige die übergebenen Daten an
             kundenIDTextBlock.Text = $"Kunden-ID: {kundenID}";
@@ -41,7 +44,7 @@ namespace hotel
             {
                 try
                 {
-                    connection.Open(); // Verbindung hier öffnen
+                    connection.Open();
 
                     string query = @"
                         SELECT DISTINCT buchung.zimmer_id AS 'Zimmer Nummer', gebaeude.id AS 'Gebäude Nummer', adresse.strasse, adresse.plz
@@ -78,25 +81,94 @@ namespace hotel
             }
         }
 
-        // Event-Handler für die Auswahl eines Zimmers
-        private void ZimmerAuswaehlen_Click(object sender, RoutedEventArgs e)
+        // Event-Handler für die Auswahl von Zimmern
+        private void ZimmerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (zimmerDataGrid.SelectedItem != null)
-            {
-                DataRowView selectedRow = zimmerDataGrid.SelectedItem as DataRowView;
-                int zimmernummer = Convert.ToInt32(selectedRow["Zimmer Nummer"]);
+            // Leere die Liste der ausgewählten Zimmer
+            ausgewaehlteZimmer.Clear();
 
-                // Buchung erstellen
-                erstelleBuchung(zimmernummer);
-            }
-            else
+            // Füge die ausgewählten Zimmer zur Liste hinzu
+            try
             {
-                MessageBox.Show("Bitte wählen Sie ein Zimmer aus.");
+                foreach (DataRowView selectedRow in zimmerDataGrid.SelectedItems)
+                {
+                    int zimmernummer = Convert.ToInt32(selectedRow["Zimmer Nummer"]);
+                    ausgewaehlteZimmer.Add(zimmernummer);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Es konnte kein Zimmer ausgewählt werden.");
             }
         }
 
-        // Methode zum Erstellen der Buchung
-        private void erstelleBuchung(int zimmernummer)
+        // Event-Handler für die Buchung der ausgewählten Zimmer
+        private void ZimmerAuswaehlen_Click(object sender, RoutedEventArgs e)
+        {
+            if (ausgewaehlteZimmer.Count > 0)
+            {
+                // Rechnung erstellen
+                int rechnungsID = ErstelleRechnung(startDatum, endDatum);
+
+                if (rechnungsID > 0)
+                {
+                    // Buchung für jedes ausgewählte Zimmer erstellen
+                    foreach (int zimmernummer in ausgewaehlteZimmer)
+                    {
+                        erstelleBuchung(zimmernummer, rechnungsID);
+                    }
+
+                    MessageBox.Show($"{ausgewaehlteZimmer.Count} Zimmer erfolgreich gebucht!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Fehler beim Erstellen der Rechnung.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bitte wählen Sie mindestens ein Zimmer aus.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        // Methode zum Erstellen der Rechnung
+        private int ErstelleRechnung(DateTime startDatum, DateTime endDatum)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string insertRechnungQuery = @"
+                        INSERT INTO rechnung (anfang, ende, kunden_id)
+                        VALUES (@startDatum, @endDatum, @kundenID);
+                        SELECT LAST_INSERT_ID();";
+
+                    MySqlCommand rechnungCmd = new MySqlCommand(insertRechnungQuery, connection);
+                    rechnungCmd.Parameters.AddWithValue("@startDatum", startDatum);
+                    rechnungCmd.Parameters.AddWithValue("@endDatum", endDatum);
+                    rechnungCmd.Parameters.AddWithValue("@kundenID", kundenID);
+
+                    int rechnungsID = Convert.ToInt32(rechnungCmd.ExecuteScalar());
+                    return rechnungsID;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Fehler beim Erstellen der Rechnung: " + ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return -1;
+                }
+                finally
+                {
+                    if (connection.State == System.Data.ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+        }
+
+        // Methode zum Erstellen der Buchung für ein einzelnes Zimmer
+        private void erstelleBuchung(int zimmernummer, int rechnungsID)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -115,8 +187,7 @@ namespace hotel
                                 VALUES (@datum, @rechnungsID, @zimmernummer);";
 
                             MySqlCommand buchungCmd = new MySqlCommand(insertBuchungQuery, connection, transaction);
-                            buchungCmd.Parameters.AddWithValue("@datum", DateTime.Now); // Aktuelles Datum für die Buchung
-                            
+                            buchungCmd.Parameters.AddWithValue("@datum", startDatum); // Verwende das Startdatum
                             buchungCmd.Parameters.AddWithValue("@rechnungsID", rechnungsID);
                             buchungCmd.Parameters.AddWithValue("@zimmernummer", zimmernummer);
 
@@ -124,14 +195,12 @@ namespace hotel
 
                             // Transaktion erfolgreich abschließen
                             transaction.Commit();
-
-                            MessageBox.Show("Buchung erfolgreich erstellt!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         catch (Exception ex)
                         {
                             // Transaktion zurückrollen, falls ein Fehler auftritt
                             transaction.Rollback();
-                            MessageBox.Show("Fehler beim Erstellen der Buchung: " + ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show($"Fehler beim Buchen des Zimmers {zimmernummer}: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                 }
@@ -140,11 +209,6 @@ namespace hotel
                     MessageBox.Show("Fehler bei der Verbindung zur Datenbank: " + ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-        }
-
-        private void ZimmerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Optional: Hier können Sie zusätzliche Logik bei der Auswahl eines Zimmers implementieren
         }
     }
 }
