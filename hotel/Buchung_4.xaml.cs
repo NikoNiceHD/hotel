@@ -48,17 +48,16 @@ namespace hotel
                     connection.Open();
 
                     string query = @"
-                        SELECT DISTINCT buchung.zimmer_id AS 'Zimmer Nummer', gebaeude.id AS 'Gebäude Nummer', adresse.strasse, adresse.plz
-                        FROM buchung
-                        INNER JOIN zimmer ON buchung.zimmer_id = zimmer.id
-                        INNER JOIN gebaeude ON zimmer.gebaeude_id = gebaeude.id
-                        INNER JOIN adresse ON gebaeude.adress_id = adresse.id
-                        WHERE zimmer_id NOT IN 
-                        (
-                            SELECT DISTINCT buchung.zimmer_id
-                            FROM buchung
-                            WHERE buchung.datum BETWEEN @startDatum AND @endDatum
-                        );";
+                       SELECT zimmer.id AS 'Zimmer Nummer', gebaeude.id AS 'Gebäude Nummer', adresse.strasse, adresse.plz
+FROM zimmer
+INNER JOIN gebaeude ON zimmer.gebaeude_id = gebaeude.id
+INNER JOIN adresse ON gebaeude.adress_id = adresse.id
+WHERE zimmer.id NOT IN 
+(
+    SELECT DISTINCT buchung.zimmer_id
+    FROM buchung
+    WHERE buchung.datum BETWEEN @startDatum AND @endDatum
+);";
                     MySqlCommand cmd = new MySqlCommand(query, connection);
                     cmd.Parameters.AddWithValue("@startDatum", startDatum);
                     cmd.Parameters.AddWithValue("@endDatum", endDatum);
@@ -141,7 +140,7 @@ namespace hotel
                         }
                     }
 
-                    // Speichere die ausgewählten Leistungen für jede Buchung
+                     
                     foreach (int buchungID in buchungsIDs)
                     {
                         SpeichereLeistungen(buchungID);
@@ -198,12 +197,6 @@ namespace hotel
             }
         }
 
-        // Methode zum Zählen der ausgewählten Leistungen
-        private int anzahlAusgewaehlteLeistungen()
-        {
-            return leistungenListView.ItemsSource.Cast<Leistungen.LeistungViewModel>().Count(leistung => leistung.IsSelected);
-        }
-
         // Methode zum Erstellen der Rechnung
         private int ErstelleRechnung(DateTime startDatum, DateTime endDatum)
         {
@@ -249,6 +242,26 @@ namespace hotel
                 {
                     connection.Open();
 
+                    // Überprüfen, ob das Zimmer an dem Datum bereits gebucht ist
+                    string checkBuchungQuery = @"
+                SELECT COUNT(*) 
+                FROM buchung 
+                WHERE datum = @datum AND zimmer_id = @zimmernummer;";
+
+                    MySqlCommand checkCmd = new MySqlCommand(checkBuchungQuery, connection);
+                    checkCmd.Parameters.AddWithValue("@datum", datum);
+                    checkCmd.Parameters.AddWithValue("@zimmernummer", zimmernummer);
+
+                    int anzahlBuchungen = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (anzahlBuchungen > 0)
+                    {
+                        // Das Zimmer ist an diesem Datum bereits gebucht
+                        MessageBox.Show($"Das Zimmer {zimmernummer} ist am {datum.ToShortDateString()} bereits gebucht.",
+                            "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return -1;
+                    }
+
                     // Start a SQL transaction
                     using (MySqlTransaction transaction = connection.BeginTransaction())
                     {
@@ -261,7 +274,7 @@ namespace hotel
                         SELECT LAST_INSERT_ID();";
 
                             MySqlCommand buchungCmd = new MySqlCommand(insertBuchungQuery, connection, transaction);
-                            buchungCmd.Parameters.AddWithValue("@datum", datum); // Now using the passed-in date
+                            buchungCmd.Parameters.AddWithValue("@datum", datum);
                             buchungCmd.Parameters.AddWithValue("@rechnungsID", rechnungsID);
                             buchungCmd.Parameters.AddWithValue("@zimmernummer", zimmernummer);
 
