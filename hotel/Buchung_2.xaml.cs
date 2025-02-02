@@ -1,52 +1,81 @@
 ﻿using System;
+using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using MySqlConnector;
 
 namespace hotel
 {
-    public partial class Buchung_erstellen : Page
+    public partial class Buchung : Page
     {
-        private int kundenID;
-        private string connectionString = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
+        string connectstring = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
+        private DataTable dataTable; 
 
-        public Buchung_erstellen(int kundenID)
+        public Buchung()
         {
             InitializeComponent();
-            this.kundenID = kundenID;
-
-            textbox_kundenid.Text = $"Kunden-ID: {kundenID}";
-            datepicker_start.SelectedDateChanged += Datepicker_start_SelectedDateChanged;
+            LoadData("SELECT * FROM azanik.kunde"); 
         }
 
-        private void Datepicker_start_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void LoadData(string query)
         {
-            if (datepicker_start.SelectedDate.HasValue)
+            try
             {
-                datepicker_ende.DisplayDateStart = datepicker_start.SelectedDate;
+                using (MySqlConnection conn = new MySqlConnection(connectstring))
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    dataTable = new DataTable();
+                    dataTable.Load(cmd.ExecuteReader());
+                    dtgrid.DataContext = dataTable; 
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Laden der Daten: " + ex.Message);
+            }
+        }
+
+
+        private void SearchTextBox(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string search = searchTextBox.Text.Trim();
+
+                if (!string.IsNullOrEmpty(search))
+                {
+                    string query = $"SELECT * FROM azanik.kunde WHERE vorname LIKE '%{search}%' OR nachname LIKE '%{search}%'";
+                    LoadData(query);
+                }
+                else
+                {
+                    MessageBox.Show("Bitte geben Sie einen Suchbegriff ein.");
+                    LoadData("SELECT * FROM azanik.kunde"); 
+                }
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDatum = datepicker_start.SelectedDate ?? DateTime.MinValue;
-            DateTime endDatum = datepicker_ende.SelectedDate ?? DateTime.MinValue;
+            LoadData("SELECT * FROM azanik.kunde");
+        }
 
-            if (startDatum == DateTime.MinValue || endDatum == DateTime.MinValue)
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (dtgrid.SelectedItem != null)
             {
-                MessageBox.Show("Bitte wählen Sie ein gültiges Start- und Enddatum aus.");
-                return;
-            }
+                DataRowView selectedRow = dtgrid.SelectedItem as DataRowView;
 
-            if (endDatum < startDatum)
-            {
-                MessageBox.Show("Das Enddatum darf nicht vor dem Startdatum liegen.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+                if (selectedRow != null)
+                {
+                    int kundenID = Convert.ToInt32(selectedRow["id"]); 
 
-            // Navigiere zur Buchung_3-Seite
-            Buchung_3 buchung3Page = new Buchung_3(kundenID, startDatum, endDatum);
-            this.NavigationService.Navigate(buchung3Page);
+                    Buchung_erstellen buchung_erstellen = new Buchung_erstellen(kundenID);
+                    this.NavigationService.Navigate(buchung_erstellen);
+                }
+            }
         }
     }
 }

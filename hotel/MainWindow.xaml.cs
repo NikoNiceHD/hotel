@@ -37,7 +37,7 @@ namespace hotel
 
         private void btn_buchung(object sender, RoutedEventArgs e)
         {
-            main.Content = new Buchung();
+            main.Content = new Buchung_1();
         }
     }
 }

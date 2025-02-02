@@ -1,81 +1,38 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using MySqlConnector;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace hotel
 {
-    public partial class Buchung : Page
+    /// <summary>
+    /// Interaktionslogik für Buchung_1.xaml
+    /// </summary>
+    public partial class Buchung_1 : Page
     {
-        string connectstring = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
-        private DataTable dataTable; 
-
-        public Buchung()
+        public Buchung_1()
         {
             InitializeComponent();
-            LoadData("SELECT * FROM azanik.kunde"); 
-        }
-
-        private void LoadData(string query)
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectstring))
-                {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    dataTable = new DataTable();
-                    dataTable.Load(cmd.ExecuteReader());
-                    dtgrid.DataContext = dataTable; 
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Fehler beim Laden der Daten: " + ex.Message);
-            }
-        }
-
-
-        private void SearchTextBox(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                string search = searchTextBox.Text.Trim();
-
-                if (!string.IsNullOrEmpty(search))
-                {
-                    string query = $"SELECT * FROM azanik.kunde WHERE vorname LIKE '%{search}%' OR nachname LIKE '%{search}%'";
-                    LoadData(query);
-                }
-                else
-                {
-                    MessageBox.Show("Bitte geben Sie einen Suchbegriff ein.");
-                    LoadData("SELECT * FROM azanik.kunde"); 
-                }
-            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            LoadData("SELECT * FROM azanik.kunde");
+            Buchung.Navigate(new Buchung());
         }
 
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if (dtgrid.SelectedItem != null)
-            {
-                DataRowView selectedRow = dtgrid.SelectedItem as DataRowView;
-
-                if (selectedRow != null)
-                {
-                    int kundenID = Convert.ToInt32(selectedRow["id"]); 
-
-                    Buchung_erstellen buchung_erstellen = new Buchung_erstellen(kundenID);
-                    this.NavigationService.Navigate(buchung_erstellen);
-                }
-            }
+            Buchung.Navigate(new Buchung_bearbeiten());
         }
     }
 }

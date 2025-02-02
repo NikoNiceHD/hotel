@@ -28,9 +28,11 @@ namespace hotel
         {
             try
             {
-                using (dbconnect.conndb())
+                
+                using (MySqlConnection connection = new MySqlConnection(connectstring))
                 {
-                    MySqlCommand cmd = new MySqlCommand(query);
+                    connection.Open();
+                    MySqlCommand cmd = new MySqlCommand(query,connection);
                     dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
                     dtgrid.DataContext = dataTable; // Binde die Daten an das DataGrid

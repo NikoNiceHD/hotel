@@ -1,0 +1,25 @@
+﻿<Page x:Class="hotel.Buchung_bearbeiten"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:hotel"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Buchung_bearbeiten">
+
+    <Grid Background="White">
+       
+        <TextBox x:Name="sucheTextBox" Margin="10,10,10,0" Height="30" 
+                 VerticalAlignment="Top"  
+                 TextChanged="SucheTextBox_TextChanged"/>
+
+        
+        <DataGrid x:Name="buchungenDataGrid" Margin="10,50,10,60" AutoGenerateColumns="True" 
+                  SelectionMode="Single" SelectionUnit="FullRow" 
+                  SelectionChanged="BuchungenDataGrid_SelectionChanged"/>
+
+        <Button Content="Buchung bearbeiten" HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+                Margin="0,0,0,20" Width="150" Click="BearbeitenButton_Click"/>
+    </Grid>
+</Page>
