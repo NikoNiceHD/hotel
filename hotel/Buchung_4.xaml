@@ -7,8 +7,13 @@
       mc:Ignorable="d"
       Title="Buchung_3" Height="721" Width="849">
 
+    <Page.Resources>
+        <!-- BooleanToVisibilityConverter für die Sichtbarkeit der DatePicker-Elemente -->
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+
     <Grid Background="White">
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="108,0,0,0" Height="616">
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="26,10,0,0" Height="614" Width="620">
             <!-- Anzeige der Kunden-ID, Startdatum und Enddatum -->
             <TextBlock x:Name="kundenIDTextBlock" FontSize="20" TextAlignment="Center" Margin="0,10,0,10"/>
             <TextBlock x:Name="startDatumTextBlock" FontSize="20" TextAlignment="Center" Margin="0,10,0,10"/>
@@ -24,12 +29,30 @@
             <ListView x:Name="leistungenListView" Width="600" Height="150">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel>
                             <!-- Checkbox für die Auswahl der Leistung -->
-                            <CheckBox IsChecked="{Binding IsSelected}" Margin="0,0,10,0"/>
-                            <!-- Anzeige der Leistungsbeschreibung und des Preises -->
-                            <TextBlock Text="{Binding LeistungName}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <TextBlock Text="{Binding Preis, StringFormat='Preis: {0:C}'}" VerticalAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding IsSelected}" Margin="0,0,10,0">
+                                <CheckBox.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding LeistungName}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBlock Text="{Binding Preis, StringFormat='Preis: {0:C}'}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </CheckBox.Content>
+                            </CheckBox>
+
+                            <!-- DatePicker für Start- und Enddatum -->
+                            <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBlock Text="Startdatum:" Margin="10,5,0,0"/>
+                                <DatePicker SelectedDate="{Binding StartDatum, UpdateSourceTrigger=PropertyChanged}" 
+                                            DisplayDateStart="{Binding DataContext.startDatum, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            DisplayDateEnd="{Binding DataContext.endDatum, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            Margin="10,0,0,5"/>
+                                <TextBlock Text="Enddatum:" Margin="10,5,0,0"/>
+                                <DatePicker SelectedDate="{Binding EndDatum, UpdateSourceTrigger=PropertyChanged}" 
+                                            DisplayDateStart="{Binding StartDatum, UpdateSourceTrigger=PropertyChanged}"
+                                            DisplayDateEnd="{Binding DataContext.endDatum, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            Margin="10,0,0,5"/>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>

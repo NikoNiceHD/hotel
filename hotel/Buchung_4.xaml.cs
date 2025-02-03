@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows;
@@ -7,9 +8,10 @@ using System.Windows.Controls;
 using MySqlConnector;
 
 namespace hotel
-{
+{ //richtiger code bis jetzt
     public partial class Buchung_3 : Page
     {
+        
         private int kundenID;
         private DateTime startDatum;
         private DateTime endDatum;
@@ -37,6 +39,88 @@ namespace hotel
             LadeVerfuegbareZimmer();
             LadeLeistungen();
         }
+
+        public class LeistungViewModel : INotifyPropertyChanged
+        {
+            private DateTime _startDatum;
+            private DateTime _endDatum;
+            private bool _isSelected;
+
+            public int LeistungID { get; set; }
+            public string LeistungName { get; set; }
+            public decimal Preis { get; set; }
+
+            public bool IsSelected
+            {
+                get => _isSelected;
+                set
+                {
+                    if (_isSelected != value)
+                    {
+                        _isSelected = value;
+                        OnPropertyChanged(nameof(IsSelected));
+                    }
+                }
+            }
+
+            public DateTime StartDatum
+            {
+                get => _startDatum;
+                set
+                {
+                    if (_startDatum != value)
+                    {
+                        if (value < BuchungStartDatum)
+                        {
+                            // Zeige eine Warnmeldung, falls das Startdatum zu früh ist
+                            MessageBox.Show($"Das Startdatum der Zusatzleistung darf nicht vor dem {BuchungStartDatum.ToShortDateString()} liegen!",
+                                "Ungültiges Startdatum", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                            value = BuchungStartDatum; // Setze das Startdatum auf das Mindestdatum
+                        }
+
+                        _startDatum = value;
+                        OnPropertyChanged(nameof(StartDatum));
+
+                        // Stelle sicher, dass EndDatum nicht vor StartDatum liegt
+                        if (EndDatum < StartDatum)
+                        {
+                            EndDatum = StartDatum;
+                        }
+                    }
+                }
+            }
+
+            public DateTime EndDatum
+            {
+                get => _endDatum;
+                set
+                {
+                    if (_endDatum != value)
+                    {
+                        _endDatum = value;
+                        OnPropertyChanged(nameof(EndDatum));
+
+                        // Stelle sicher, dass EndDatum nicht vor StartDatum liegt
+                        if (EndDatum < StartDatum)
+                        {
+                            StartDatum = EndDatum;
+                        }
+                    }
+                }
+            }
+
+            public DateTime BuchungStartDatum { get; set; }
+            public DateTime BuchungEndDatum { get; set; }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
 
         // Methode zum Laden der verfügbaren Zimmer
         private void LadeVerfuegbareZimmer()
@@ -84,12 +168,64 @@ WHERE zimmer.id NOT IN
         // Methode zum Laden der verfügbaren Leistungen
         private void LadeLeistungen()
         {
-            Leistungen leistungenService = new Leistungen();
-            List<Leistungen.LeistungViewModel> leistungen = leistungenService.LadeLeistungen();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
 
-            // Binde die Leistungen an die ListView
-            leistungenListView.ItemsSource = leistungen;
+                    string query = "SELECT id, leistung, preis FROM leistungen;";
+                    MySqlCommand cmd = new MySqlCommand(query, connection);
+
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(cmd.ExecuteReader());
+
+                    // Konvertiere die Daten in eine Liste von LeistungViewModel
+                    List<LeistungViewModel> leistungen = new List<LeistungViewModel>();
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        DateTime leistungStart = startDatum; // Standardwert: Startdatum der Buchung
+                        DateTime leistungEnd = endDatum;     // Standardwert: Enddatum der Buchung
+
+                        // Falls Startdatum der Leistung vor Buchungsstart liegt, Warnung anzeigen
+                        if (leistungStart < startDatum)
+                        {
+                            MessageBox.Show($"Das Startdatum der Zusatzleistung '{row["leistung"]}' darf nicht vor dem {startDatum.ToShortDateString()} liegen!",
+                                "Ungültiges Startdatum", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                            leistungStart = startDatum; // Setze auf Buchungsstart
+                        }
+
+                        leistungen.Add(new LeistungViewModel
+                        {
+                            LeistungID = Convert.ToInt32(row["id"]),
+                            LeistungName = row["leistung"].ToString(),
+                            Preis = Convert.ToDecimal(row["preis"]),
+                            IsSelected = false, // Standardmäßig nicht ausgewählt
+                            StartDatum = leistungStart,
+                            EndDatum = leistungEnd,
+                            BuchungStartDatum = startDatum,
+                            BuchungEndDatum = endDatum
+                        });
+                    }
+
+                    // Binde die Leistungen an die ListView
+                    leistungenListView.ItemsSource = leistungen;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Fehler beim Laden der Leistungen: " + ex.Message);
+                }
+                finally
+                {
+                    if (connection.State == System.Data.ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
+            }
         }
+
 
         // Event-Handler für die Auswahl von Zimmern
         private void ZimmerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -117,6 +253,17 @@ WHERE zimmer.id NOT IN
         {
             if (ausgewaehlteZimmer.Count > 0)
             {
+                // Überprüfe, ob das EndDatum der Zusatzleistungen nach dem Buchungs-Enddatum liegt
+                foreach (LeistungViewModel leistung in leistungenListView.ItemsSource)
+                {
+                    if (leistung.IsSelected && leistung.EndDatum > endDatum)
+                    {
+                        MessageBox.Show($"Das Enddatum der Zusatzleistung '{leistung.LeistungName}' darf nicht nach dem {endDatum.ToShortDateString()} liegen!",
+                            "Ungültiges Enddatum", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return; // Breche den Vorgang ab
+                    }
+                }
+
                 // Rechnung erstellen
                 int rechnungsID = ErstelleRechnung(startDatum, endDatum);
 
@@ -140,11 +287,8 @@ WHERE zimmer.id NOT IN
                         }
                     }
 
-                     
-                    foreach (int buchungID in buchungsIDs)
-                    {
-                        SpeichereLeistungen(buchungID);
-                    }
+                    // Speichere die ausgewählten Leistungen für die Buchungen
+                    SpeichereLeistungen(rechnungsID);
 
                     MessageBox.Show($"{buchungsIDs.Count} Buchungen erfolgreich erstellt!",
                         "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -163,7 +307,7 @@ WHERE zimmer.id NOT IN
 
 
         // Methode zum Speichern der ausgewählten Leistungen
-        private void SpeichereLeistungen(int buchungID)
+        private void SpeichereLeistungen(int rechnungsID)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -171,22 +315,48 @@ WHERE zimmer.id NOT IN
                 {
                     connection.Open();
 
-                    foreach (Leistungen.LeistungViewModel leistung in leistungenListView.ItemsSource)
+                    foreach (LeistungViewModel leistung in leistungenListView.ItemsSource)
                     {
                         if (leistung.IsSelected)
                         {
-                            string insertLeistungQuery = @"
-                        INSERT INTO buchung_hat_leistung (buchung_id, leistung_id)
-                        VALUES (@buchungID, @leistungID);";
+                            // Hole alle Buchungen für die Rechnung
+                            string getBuchungenQuery = @"
+                        SELECT id, datum 
+                        FROM buchung 
+                        WHERE rechnung_id = @rechnungsID 
+                        AND datum BETWEEN @startDatum AND @endDatum;";
 
-                            MySqlCommand cmd = new MySqlCommand(insertLeistungQuery, connection);
-                            cmd.Parameters.AddWithValue("@buchungID", buchungID);
-                            cmd.Parameters.AddWithValue("@leistungID", leistung.LeistungID);
+                            MySqlCommand getBuchungenCmd = new MySqlCommand(getBuchungenQuery, connection);
+                            getBuchungenCmd.Parameters.AddWithValue("@rechnungsID", rechnungsID);
+                            getBuchungenCmd.Parameters.AddWithValue("@startDatum", leistung.StartDatum);
+                            getBuchungenCmd.Parameters.AddWithValue("@endDatum", leistung.EndDatum);
 
-                            cmd.ExecuteNonQuery();
+                            List<int> buchungsIDs = new List<int>();
 
-                            // Debug-Ausgabe
-                            //MessageBox.Show($"Leistung {leistung.LeistungName} erfolgreich hinzugefügt.", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+                            // Verwende einen DataReader, um die Buchungen zu lesen
+                            using (MySqlDataReader reader = getBuchungenCmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    int buchungID = reader.GetInt32("id");
+                                    buchungsIDs.Add(buchungID);
+                                }
+                            }
+
+                            // Füge die Leistung für jede Buchung hinzu
+                            foreach (int buchungID in buchungsIDs)
+                            {
+                                string insertLeistungQuery = @"
+                            INSERT INTO buchung_hat_leistung (buchung_id, leistung_id, anzahl)
+                            VALUES (@buchungID, @leistungID, @anzahl);";
+
+                                MySqlCommand insertLeistungCmd = new MySqlCommand(insertLeistungQuery, connection);
+                                insertLeistungCmd.Parameters.AddWithValue("@buchungID", buchungID);
+                                insertLeistungCmd.Parameters.AddWithValue("@leistungID", leistung.LeistungID);
+                                insertLeistungCmd.Parameters.AddWithValue("@anzahl", 1); // Anzahl der Leistungen (hier immer 1)
+
+                                insertLeistungCmd.ExecuteNonQuery();
+                            }
                         }
                     }
                 }
