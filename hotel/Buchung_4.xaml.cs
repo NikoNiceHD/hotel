@@ -132,16 +132,25 @@ namespace hotel
                     connection.Open();
 
                     string query = @"
-                       SELECT zimmer.id AS 'Zimmer Nummer', gebaeude.id AS 'Gebäude Nummer', adresse.strasse, adresse.plz
-FROM zimmer
-INNER JOIN gebaeude ON zimmer.gebaeude_id = gebaeude.id
-INNER JOIN adresse ON gebaeude.adress_id = adresse.id
-WHERE zimmer.id NOT IN 
-(
-    SELECT DISTINCT buchung.zimmer_id
-    FROM buchung
-    WHERE buchung.datum BETWEEN @startDatum AND @endDatum
-);";
+                SELECT 
+                    zimmer.id AS 'Zimmer Nummer', 
+                    gebaeude.id AS 'Gebäude Nummer', 
+                    adresse.strasse, 
+                    adresse.plz,
+                    GROUP_CONCAT(eigenschaften.eigenschaft SEPARATOR ', ') AS 'Eigenschaften'
+                FROM zimmer
+                INNER JOIN gebaeude ON zimmer.gebaeude_id = gebaeude.id
+                INNER JOIN adresse ON gebaeude.adress_id = adresse.id
+                LEFT JOIN zimmer_hat_eigenschaften ON zimmer.id = zimmer_hat_eigenschaften.zimmer_id
+                LEFT JOIN eigenschaften ON zimmer_hat_eigenschaften.eigenschaften_id = eigenschaften.id
+                WHERE zimmer.id NOT IN 
+                (
+                    SELECT DISTINCT buchung.zimmer_id
+                    FROM buchung
+                    WHERE buchung.datum BETWEEN @startDatum AND @endDatum
+                )
+                GROUP BY zimmer.id;";
+
                     MySqlCommand cmd = new MySqlCommand(query, connection);
                     cmd.Parameters.AddWithValue("@startDatum", startDatum);
                     cmd.Parameters.AddWithValue("@endDatum", endDatum);
