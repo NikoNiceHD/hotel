@@ -74,10 +74,10 @@ namespace hotel
                     connection.Open();
 
                     string query = @"
-                        SELECT l.id, l.leistung, 
-                               IF(bl.buchung_id IS NOT NULL, 1, 0) AS gebucht
-                        FROM leistungen l
-                        LEFT JOIN buchung_hat_leistung bl ON l.id = bl.leistung_id AND bl.buchung_id = @buchungID;";
+                SELECT l.id, l.leistung, 
+                       IF(bl.buchung_id IS NOT NULL, 1, 0) AS gebucht
+                FROM leistungen l
+                LEFT JOIN buchung_hat_leistung bl ON l.id = bl.leistung_id AND bl.buchung_id = @buchungID;";
 
                     MySqlCommand cmd = new MySqlCommand(query, connection);
                     cmd.Parameters.AddWithValue("@buchungID", buchungID);
@@ -90,7 +90,7 @@ namespace hotel
                         CheckBox checkBox = new CheckBox
                         {
                             Content = row["leistung"].ToString(),
-                            Tag = row["id"], 
+                            Tag = row["id"],
                             IsChecked = row["gebucht"].ToString() == "1"
                         };
                         leistungenStackPanel.Children.Add(checkBox);
@@ -111,6 +111,7 @@ namespace hotel
                 {
                     connection.Open();
 
+                    // Lösche alle bestehenden Leistungen für diese Buchung
                     string deleteQuery = "DELETE FROM buchung_hat_leistung WHERE buchung_id = @buchungID;";
                     MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, connection);
                     deleteCmd.Parameters.AddWithValue("@buchungID", buchungID);
@@ -121,10 +122,12 @@ namespace hotel
                     {
                         if (checkBox.IsChecked == true)
                         {
-                            string insertQuery = "INSERT INTO buchung_hat_leistung (buchung_id, leistung_id) VALUES (@buchungID, @leistungID);";
+                            // Setze die Anzahl automatisch auf 1
+                            string insertQuery = "INSERT INTO buchung_hat_leistung (buchung_id, leistung_id, anzahl) VALUES (@buchungID, @leistungID, @anzahl);";
                             MySqlCommand insertCmd = new MySqlCommand(insertQuery, connection);
                             insertCmd.Parameters.AddWithValue("@buchungID", buchungID);
                             insertCmd.Parameters.AddWithValue("@leistungID", checkBox.Tag);
+                            insertCmd.Parameters.AddWithValue("@anzahl", 1); // Anzahl wird automatisch auf 1 gesetzt
                             insertCmd.ExecuteNonQuery();
                         }
                     }
