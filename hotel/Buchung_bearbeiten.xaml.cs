@@ -81,6 +81,8 @@ namespace hotel
 
         private void BuchungenDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
+            
             if (buchungenDataGrid.SelectedItem != null)
             {
                 DataRowView selectedRow = buchungenDataGrid.SelectedItem as DataRowView;

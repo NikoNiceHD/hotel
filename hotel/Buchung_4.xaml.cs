@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using MySqlConnector;
 
 namespace hotel
@@ -25,6 +26,7 @@ namespace hotel
         // Konstruktor, der die Kunden-ID, Startdatum und Enddatum empfängt
         public Buchung_3(int kundenID, DateTime startDatum, DateTime endDatum)
         {
+
             InitializeComponent();
             this.kundenID = kundenID;
             this.startDatum = startDatum;
@@ -32,8 +34,8 @@ namespace hotel
 
             // Zeige die übergebenen Daten an
             kundenIDTextBlock.Text = $"Kunden-ID: {kundenID}";
-            startDatumTextBlock.Text = $"Startdatum: {startDatum.ToShortDateString()}";
-            endDatumTextBlock.Text = $"Enddatum: {endDatum.ToShortDateString()}";
+            startDatumTextBlock.Text = $"Startdatum: {startDatum.ToString("dd.MM.yyyy")}"; // Europäisches Format
+            endDatumTextBlock.Text = $"Enddatum: {endDatum.ToString("dd.MM.yyyy")}";     // Europäisches Format
 
             // Lade verfügbare Zimmer und Leistungen
             LadeVerfuegbareZimmer();
@@ -73,7 +75,7 @@ namespace hotel
                         if (value < BuchungStartDatum)
                         {
                             // Zeige eine Warnmeldung, falls das Startdatum zu früh ist
-                            MessageBox.Show($"Das Startdatum der Zusatzleistung darf nicht vor dem {BuchungStartDatum.ToShortDateString()} liegen!",
+                            MessageBox.Show($"Das Startdatum der Zusatzleistung '{LeistungName}' darf nicht vor dem {BuchungStartDatum.ToString("dd.MM.yyyy")} liegen!",
                                 "Ungültiges Startdatum", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                             value = BuchungStartDatum; // Setze das Startdatum auf das Mindestdatum
@@ -81,12 +83,7 @@ namespace hotel
 
                         _startDatum = value;
                         OnPropertyChanged(nameof(StartDatum));
-
-                        // Stelle sicher, dass EndDatum nicht vor StartDatum liegt
-                        if (EndDatum < StartDatum)
-                        {
-                            EndDatum = StartDatum;
-                        }
+                        OnPropertyChanged(nameof(StartDatumLabel)); // Aktualisiere das Label
                     }
                 }
             }
@@ -100,18 +97,17 @@ namespace hotel
                     {
                         _endDatum = value;
                         OnPropertyChanged(nameof(EndDatum));
-
-                        // Stelle sicher, dass EndDatum nicht vor StartDatum liegt
-                        if (EndDatum < StartDatum)
-                        {
-                            StartDatum = EndDatum;
-                        }
+                        OnPropertyChanged(nameof(EndDatumLabel)); // Aktualisiere das Label
                     }
                 }
             }
 
             public DateTime BuchungStartDatum { get; set; }
             public DateTime BuchungEndDatum { get; set; }
+
+            // Neue Eigenschaften für die Labels
+            public string StartDatumLabel => StartDatum.ToString("dd.MM.yyyy");
+            public string EndDatumLabel => EndDatum.ToString("dd.MM.yyyy");
 
             public event PropertyChangedEventHandler PropertyChanged;
 
@@ -182,15 +178,14 @@ namespace hotel
                 try
                 {
                     connection.Open();
-
                     string query = "SELECT id, leistung, preis FROM leistungen;";
                     MySqlCommand cmd = new MySqlCommand(query, connection);
-
                     DataTable dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
 
                     // Konvertiere die Daten in eine Liste von LeistungViewModel
                     List<LeistungViewModel> leistungen = new List<LeistungViewModel>();
+
                     foreach (DataRow row in dataTable.Rows)
                     {
                         DateTime leistungStart = startDatum; // Standardwert: Startdatum der Buchung
@@ -199,7 +194,9 @@ namespace hotel
                         // Falls Startdatum der Leistung vor Buchungsstart liegt, Warnung anzeigen
                         if (leistungStart < startDatum)
                         {
-                            MessageBox.Show($"Das Startdatum der Zusatzleistung '{row["leistung"]}' darf nicht vor dem {startDatum.ToShortDateString()} liegen!",
+                            // Formatierung des Datums im europäischen Format
+                            string startDatumFormatiert = startDatum.ToString("dd.MM.yyyy");
+                            MessageBox.Show($"Das Startdatum der Zusatzleistung '{row["leistung"]}' darf nicht vor dem {startDatumFormatiert} liegen!",
                                 "Ungültiges Startdatum", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                             leistungStart = startDatum; // Setze auf Buchungsstart
@@ -487,6 +484,68 @@ namespace hotel
                 }
             }
         }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is DatePicker datePicker)
+            {
+                // Suche das übergeordnete ListViewItem
+                var listViewItem = FindAncestor<ListViewItem>(datePicker);
+                if (listViewItem == null)
+                    return;
+
+                // Suche das Label innerhalb des ListViewItem
+                Label label = null;
+                if (datePicker.Name == "fernsehen_anfang")
+                {
+                    label = FindChild<Label>(listViewItem, "label_fernsehen_anfang");
+                }
+                else if (datePicker.Name == "fernsehen_ende")
+                {
+                    label = FindChild<Label>(listViewItem, "label_fernsehen_ende");
+                }
+
+                // Setze den neuen Wert im europäischen Format
+                if (label != null)
+                {
+                    label.Content = datePicker.SelectedDate.HasValue
+                        ? datePicker.SelectedDate.Value.ToString("dd.MM.yyyy") // Europäisches Format
+                        : "Datum eintragen";
+                }
+            }
+        }
+
+        // Methode zum Finden eines übergeordneten Elements
+        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            while (current != null && !(current is T))
+            {
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return current as T;
+        }
+
+        // Methode zum Finden eines untergeordneten Elements nach Name
+        private static T FindChild<T>(DependencyObject parent, string childName) where T : FrameworkElement
+        {
+            if (parent == null) return null;
+
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T element && element.Name == childName)
+                {
+                    return element;
+                }
+
+                T foundChild = FindChild<T>(child, childName);
+                if (foundChild != null)
+                    return foundChild;
+            }
+            return null;
+        }
+
 
     }
 }

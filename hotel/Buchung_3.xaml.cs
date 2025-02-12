@@ -48,5 +48,29 @@ namespace hotel
             Buchung_3 buchung3Page = new Buchung_3(kundenID, startDatum, endDatum);
             this.NavigationService.Navigate(buchung3Page);
         }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Aktualisiere das Label für das Startdatum
+            if (datepicker_start.SelectedDate.HasValue)
+            {
+                label_start.Content = datepicker_start.SelectedDate.Value.ToString("dd.MM.yyyy");
+            }
+            else
+            {
+                label_start.Content = "Datum eintragen";
+            }
+
+            // Aktualisiere das Label für das Enddatum
+            if (datepicker_ende.SelectedDate.HasValue)
+            {
+                label_ende.Content = datepicker_ende.SelectedDate.Value.ToString("dd.MM.yyyy");
+            }
+            else
+            {
+                label_ende.Content = "Datum eintragen";
+            }
+        }
+
     }
 }

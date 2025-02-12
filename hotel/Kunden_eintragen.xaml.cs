@@ -143,5 +143,29 @@ namespace hotel
                 }
             }
         }
+
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Aktualisiere das Label für das Geburtsdatum
+            if (datepicker_geburtstag.SelectedDate.HasValue)
+            {
+                label_geburtstag.Content = datepicker_geburtstag.SelectedDate.Value.ToShortDateString();
+            }
+            else
+            {
+                label_geburtstag.Content = "Datum eintragen";
+            }
+
+            // Aktualisiere das Label für das Einzugsdatum
+            if (datepicker_einzugsdatum.SelectedDate.HasValue)
+            {
+                label_einzugsdatum.Content = datepicker_einzugsdatum.SelectedDate.Value.ToShortDateString();
+            }
+            else
+            {
+                label_einzugsdatum.Content = "Datum eintragen";
+            }
+        }
     }
 }

@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading;
 using System.Windows;
 
 namespace hotel
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            // Setze die globale Kultur auf Deutsch
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("de-DE");
+
+            base.OnStartup(e);
+        }
     }
 }

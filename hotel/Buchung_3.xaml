@@ -6,15 +6,111 @@
       xmlns:local="clr-namespace:hotel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Buchung_erstellen">
+      Title="Buchung_erstellen"
+      Background="#1a1c21">
 
-    <Grid Background="White">
-        <DatePicker x:Name="datepicker_start" HorizontalAlignment="Left" Margin="131,225,0,0" VerticalAlignment="Top"/>
-        <DatePicker x:Name="datepicker_ende" HorizontalAlignment="Left" Margin="510,225,0,0" VerticalAlignment="Top"/>
-        <Label Content="Startdatum" HorizontalAlignment="Left" Margin="131,194,0,0" VerticalAlignment="Top"/>
-        <Label Content="Enddatum" HorizontalAlignment="Left" Margin="510,194,0,0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="textbox_kundenid" HorizontalAlignment="Center" Margin="0,20,0,0" TextWrapping="Wrap" Text="Ausgewählte Kunden ID:" VerticalAlignment="Top" FontSize="24"/>
-        <Button Content="Buchung erstellen" HorizontalAlignment="Center" Margin="0,312,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+    <Grid>
+        <!-- Linker Rand -->
+        <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+        <!-- Rechter Rand -->
+        <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
+        <Grid Margin="10">
+            <!-- TextBlock für ausgewählte Kunden-ID -->
+            <TextBlock x:Name="textbox_kundenid" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,20,0,0" 
+                       Text="Ausgewählte Kunden ID:" 
+                       FontSize="24"
+                       Foreground="White"/>
+
+            <!-- Bereich für Startdatum -->
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="131,150,0,0" VerticalAlignment="Top">
+                <!-- Überschrift -->
+                <Label Content="Startdatum" Foreground="White"/>
+                <!-- Zeile mit DatePicker und Label zur Anzeige des Datums -->
+                <StackPanel Orientation="Horizontal">
+                    <!-- Label, das das ausgewählte Datum anzeigt (Format dd.MM.yyyy) -->
+                    <Label x:Name="label_start" 
+                           Foreground="White"
+                           Content="Datum eintragen"/>
+                    <!-- DatePicker, dessen TextBox ausgeblendet ist -->
+                    <DatePicker x:Name="datepicker_start" Width="40"
+                                Background="#272B2F"
+                                Foreground="White"
+                                BorderBrush="#2967FF"
+                                BorderThickness="1"
+                                Padding="5"
+                                SelectedDateChanged="DatePicker_SelectedDateChanged">
+                        <DatePicker.Resources>
+                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Bereich für Enddatum -->
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="510,150,0,0" VerticalAlignment="Top">
+                <!-- Überschrift -->
+                <Label Content="Enddatum" Foreground="White"/>
+                <!-- Zeile mit DatePicker und Label zur Anzeige des Datums -->
+                <StackPanel Orientation="Horizontal">
+                    <!-- Label, das das ausgewählte Datum anzeigt (Format dd.MM.yyyy) -->
+                    <Label x:Name="label_ende" 
+                           Foreground="White"
+                           Content="Datum eintragen"/>
+                    <!-- DatePicker, dessen TextBox ausgeblendet ist -->
+                    <DatePicker x:Name="datepicker_ende" Width="40"
+                                Background="#272B2F"
+                                Foreground="White"
+                                BorderBrush="#2967FF"
+                                BorderThickness="1"
+                                Padding="5"
+                                SelectedDateChanged="DatePicker_SelectedDateChanged">
+                        <DatePicker.Resources>
+                            <Style TargetType="{x:Type DatePickerTextBox}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Button zum Erstellen der Buchung -->
+            <Button Content="Buchung erstellen" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,312,0,0" 
+                    VerticalAlignment="Top" 
+                    Click="Button_Click"
+                    Height="40" 
+                    Width="180">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#212020"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="#212020"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
     </Grid>
 </Page>

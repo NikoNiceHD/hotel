@@ -10,32 +10,32 @@ namespace hotel
     public partial class Kunden_bearbeiten : Page
     {
         string connectstring = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
-        private DataTable dataTable; // Datenquelle für das DataGrid
+        private DataTable dataTable;
+        private string baseQuery = @"SELECT kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, 
+                                   adresse.strasse, adresse.plz, kunde_hat_adresse.datum AS Einzugsdatum, 
+                                   plz.ort 
+                                   FROM kunde 
+                                   INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id 
+                                   INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id 
+                                   INNER JOIN plz ON plz.plz = adresse.plz";
 
         public Kunden_bearbeiten()
         {
             InitializeComponent();
-            LoadData("Select kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, adresse.strasse, adresse.plz, kunde_hat_adresse.datum AS Einzugsdatum, plz.ort FROM kunde " +
-                "INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id " +
-                "INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id " +
-                "INNER JOIN plz ON plz.plz = adresse.plz; " 
-              // Lade alle Kunden beim Start
-            ); // Lade alle Kunden beim Start
+            LoadData(baseQuery); // Load all customers initially
         }
 
-        // Methode zum Laden der Daten in das DataGrid
         private void LoadData(string query)
         {
             try
             {
-                
                 using (MySqlConnection connection = new MySqlConnection(connectstring))
                 {
                     connection.Open();
-                    MySqlCommand cmd = new MySqlCommand(query,connection);
+                    MySqlCommand cmd = new MySqlCommand(query, connection);
                     dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
-                    dtgrid.DataContext = dataTable; // Binde die Daten an das DataGrid
+                    dtgrid.DataContext = dataTable;
                 }
             }
             catch (Exception ex)
@@ -44,35 +44,37 @@ namespace hotel
             }
         }
 
-        // Suchfunktion bei Drücken der Enter-Taste  WHERE vorname LIKE '%{search}%' OR nachname LIKE '%{search}%'
-        private void SearchTextBox(object sender, KeyEventArgs e)
+        private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            string search = searchTextBox.Text.Trim();
+
+            if (!string.IsNullOrEmpty(search))
             {
-                string search = searchTextBox.Text.Trim();
+                string query = $@"{baseQuery} 
+                                WHERE kunde.vorname LIKE @search 
+                                OR kunde.nachname LIKE @search";
 
-                if (!string.IsNullOrEmpty(search))
+                try
                 {
-                    string query = @"SELECT kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, adresse.strasse, adresse.plz, 
-                        kunde_hat_adresse.datum AS Einzugsdatum, plz.ort 
-                 FROM kunde 
-                 INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id 
-                 INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id
-                 INNER JOIN plz ON plz.plz = adresse.plz
-                 WHERE kunde.vorname LIKE '%" + search + "%' OR kunde.nachname LIKE '%" + search + "%';";
+                    using (MySqlConnection connection = new MySqlConnection(connectstring))
+                    {
+                        connection.Open();
+                        MySqlCommand cmd = new MySqlCommand(query, connection);
+                        cmd.Parameters.AddWithValue("@search", $"%{search}%");
 
-                    LoadData(query);
+                        dataTable = new DataTable();
+                        dataTable.Load(cmd.ExecuteReader());
+                        dtgrid.DataContext = dataTable;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Bitte geben Sie einen Suchbegriff ein.");
-                    LoadData(@"SELECT kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, adresse.strasse, adresse.plz, 
-                        kunde_hat_adresse.datum AS Einzugsdatum, plz.ort 
-                 FROM kunde 
-                 INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id 
-                 INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id
-                 INNER JOIN plz ON plz.plz = adresse.plz;"); // Lade alle Daten, wenn die Suche leer ist
+                    MessageBox.Show("Fehler bei der Suche: " + ex.Message);
                 }
+            }
+            else
+            {
+                LoadData(baseQuery); // Load all data when search is empty
             }
         }
 

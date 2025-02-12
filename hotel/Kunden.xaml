@@ -6,13 +6,88 @@
       xmlns:local="clr-namespace:hotel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Kunden">
+      Title="Kunden"
+      Background="#1a1c21">
 
-    <Grid Background="White">
-        
-        <Button Content="Kunden Eintragen" HorizontalAlignment="Left" Margin="261,241,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Button Content="Kunden Bearbeiten" HorizontalAlignment="Left" Margin="454,241,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
-        <Frame x:Name="kunden" />
+    <Grid>
+        <!-- Linker Rand -->
+        <Border Width="10" 
+                Background="#1a1c21" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Stretch" />
+
+        <!-- Rechter Rand -->
+        <Border Width="10" 
+                Background="#1a1c21" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Stretch" />
+
+        <Grid Margin="10,10,10,10">
+            <!-- Buttons -->
+            <Button Content="Kunden Eintragen" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    Margin="238,235,0,0" 
+                    Click="Button_Click" Height="27" Width="99">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#212020"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="#212020"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button Content="Kunden Bearbeiten" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    Margin="435,235,0,0" 
+                    Click="Button_Click_1" Height="27" Width="109">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#212020"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="#212020"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <!-- Frame -->
+            <Frame x:Name="kunden"/>
+        </Grid>
     </Grid>
-  
 </Page>

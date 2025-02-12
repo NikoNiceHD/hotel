@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using MySqlConnector;
 using System.Windows;
+using System.ComponentModel;
 
 namespace hotel
 {
@@ -11,16 +12,71 @@ namespace hotel
     {
         private string connectionString = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
 
-        public class LeistungViewModel
+        public class LeistungViewModel : INotifyPropertyChanged
         {
+            private DateTime _startDatum;
+            private DateTime _endDatum;
+            private bool _isSelected;
+
             public int LeistungID { get; set; } // ID der Leistung
             public string LeistungName { get; set; } // Name der Leistung
             public decimal Preis { get; set; } // Preis der Leistung
-            public bool IsSelected { get; set; } // Auswahlstatus (Checkbox)
+
+            public bool IsSelected
+            {
+                get => _isSelected;
+                set
+                {
+                    if (_isSelected != value)
+                    {
+                        _isSelected = value;
+                        OnPropertyChanged(nameof(IsSelected));
+                    }
+                }
+            }
+
+            public DateTime StartDatum
+            {
+                get => _startDatum;
+                set
+                {
+                    if (_startDatum != value)
+                    {
+                        _startDatum = value;
+                        OnPropertyChanged(nameof(StartDatum));
+                        OnPropertyChanged(nameof(StartDatumLabel)); // Aktualisiere das Label
+                    }
+                }
+            }
+
+            public DateTime EndDatum
+            {
+                get => _endDatum;
+                set
+                {
+                    if (_endDatum != value)
+                    {
+                        _endDatum = value;
+                        OnPropertyChanged(nameof(EndDatum));
+                        OnPropertyChanged(nameof(EndDatumLabel)); // Aktualisiere das Label
+                    }
+                }
+            }
+
+            // Neue Eigenschaften für die Labels
+            public string StartDatumLabel => StartDatum.ToString("dd.MM.yyyy");
+            public string EndDatumLabel => EndDatum.ToString("dd.MM.yyyy");
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         // Methode zum Laden der Leistungen
-        public List<LeistungViewModel> LadeLeistungen()
+        public List<LeistungViewModel> LadeLeistungen(DateTime startDatum, DateTime endDatum)
         {
             List<LeistungViewModel> leistungen = new List<LeistungViewModel>();
 
@@ -43,7 +99,9 @@ namespace hotel
                             LeistungID = row.Field<int>("id"),
                             LeistungName = row.Field<string>("leistung"),
                             Preis = row.Field<decimal>("preis"),
-                            IsSelected = false // Standardmäßig nicht ausgewählt
+                            IsSelected = false, // Standardmäßig nicht ausgewählt
+                            StartDatum = startDatum, // Standardwert: Startdatum der Buchung
+                            EndDatum = endDatum     // Standardwert: Enddatum der Buchung
                         }).ToList();
                 }
                 catch (Exception ex)

@@ -6,21 +6,134 @@
       xmlns:local="clr-namespace:hotel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Buchung_Bearbeiten_Details">
+      Title="Buchung_Bearbeiten_Details"
+      Background="#1a1c21">
 
-    <Grid Margin="10" Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid>
+        <!-- Linker Rand -->
+        <Border Width="10" 
+                Background="#1a1c21" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Stretch" />
 
-        <!-- Buchungsdetails -->
-        <TextBlock x:Name="buchungDetailsTextBlock" FontSize="14" Margin="0,0,0,10" Grid.Row="0" />
-        <ScrollViewer Grid.Row="1">
-            <StackPanel x:Name="leistungenStackPanel" />
-        </ScrollViewer>
+        <!-- Rechter Rand -->
+        <Border Width="10" 
+                Background="#1a1c21" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Stretch" />
 
-        <Button Content="Speichern" Click="SpeichernButton_Click" Grid.Row="2" HorizontalAlignment="Right" Width="100" />
+        <Grid Margin="10,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Buchungsdetails -->
+            <TextBlock x:Name="buchungDetailsTextBlock" 
+                       FontSize="14" 
+                       Margin="0,0,0,10" 
+                       Grid.Row="0"
+                       Foreground="White"/>
+
+            <!-- Zusatzleistungen -->
+            <ScrollViewer Grid.Row="1" 
+                          Background="#272B2F" 
+                          Margin="0,10" 
+                          BorderThickness="0"
+                          VerticalScrollBarVisibility="Auto">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Background" Value="#1a1c21"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <Border CornerRadius="5">
+                    <StackPanel x:Name="leistungenStackPanel" 
+                               Margin="10">
+                        <!-- CheckBox-Stil -->
+                        <StackPanel.Resources>
+                            <Style TargetType="CheckBox">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="CheckBox">
+                                            <Grid>
+                                                <!-- Äußerer weißer Bereich -->
+                                                <Border x:Name="outerBorder"
+                                                        Background="White"
+                                                        Width="16"
+                                                        Height="16"
+                                                        CornerRadius="3"
+                                                        BorderThickness="1"
+                                                        BorderBrush="Black"/>
+                                                <!-- Innerer schwarzer Bereich -->
+                                                <Border x:Name="innerBorder"
+                                                        Background="Black"
+                                                        Width="12"
+                                                        Height="12"
+                                                        CornerRadius="2"
+                                                        Margin="2"/>
+                                                <!-- Haken (blau) -->
+                                                <Path x:Name="checkMark"
+                                                      Data="M 0 5 L 5 10 L 12 0"
+                                                      Stroke="#2967FF"
+                                                      StrokeThickness="2"
+                                                      Visibility="Collapsed"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                                <!-- ContentPresenter für den Text -->
+                                                <ContentPresenter x:Name="contentPresenter"
+                                                                  Content="{TemplateBinding Content}"
+                                                                  Margin="25,0,0,0"
+                                                                  VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter TargetName="checkMark" Property="Visibility" Value="Visible"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </StackPanel.Resources>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+
+            <!-- Speichern-Button -->
+            <Button Content="Speichern" 
+                    Click="SpeichernButton_Click" 
+                    Grid.Row="2" 
+                    HorizontalAlignment="Right" 
+                    Height="40"
+                    Width="140" 
+                    Margin="0,10,0,0">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#212020"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="#212020"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
     </Grid>
 </Page>

@@ -6,21 +6,115 @@
       xmlns:local="clr-namespace:hotel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Zimmer_eintragen">
+      Title="Zimmer eintragen"
+      Background="#1a1c21">
 
-    <Grid Background="White">
-        <TextBox x:Name="TextboxzimmerID" HorizontalAlignment="Left" Margin="37,123,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="TextboxgebaeudeID" HorizontalAlignment="Left" Margin="254,123,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Hinzufügen" HorizontalAlignment="Left" Margin="360,341,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Label Content="Zimmer ID" HorizontalAlignment="Left" Margin="31,92,0,0" VerticalAlignment="Top"/>
-        <Label Content="Gebäude ID" HorizontalAlignment="Left" Margin="254,92,0,0" VerticalAlignment="Top"/>
-        <Label Content="eigenschaften (bei keinen eigenschaften leer lassen)" HorizontalAlignment="Left" Margin="37,194,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckBoxDoppelzimmer" Content="Doppelzimmer" HorizontalAlignment="Left" Margin="37,225,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckBoxSuite" Content="Suite" HorizontalAlignment="Left" Margin="155,225,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckBoxHauptstrasse" Content="An der Hauptstraße" HorizontalAlignment="Left" Margin="255,225,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckBoxKuehlschrank" Content="Kühlschrank" HorizontalAlignment="Left" Margin="37,264,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckBoxTerasse" Content="Terasse" HorizontalAlignment="Left" Margin="155,264,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckBoxGrosserBalkon" Content="Großer Balkon" HorizontalAlignment="Left" Margin="254,264,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="CheckBoxKleinerBalkon" Content="kleiner Balkon" HorizontalAlignment="Left" Margin="37,301,0,0" VerticalAlignment="Top"/>
+    <Grid>
+        <!-- Linker Rand -->
+        <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+
+        <!-- Rechter Rand -->
+        <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+
+        <Grid Margin="20">
+            <!-- Zimmer ID -->
+            <StackPanel Orientation="Vertical" Margin="30,50,0,0">
+                <Label Content="Zimmer ID" Foreground="White"/>
+                <TextBox x:Name="TextboxzimmerID" 
+                         Height="30" Width="200"
+                         Background="#272B2F"
+                         Foreground="White"
+                         BorderBrush="#2967FF"
+                         BorderThickness="1"
+                         Padding="5" HorizontalAlignment="Left">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="CaretBrush" Value="White"/>
+                            <Setter Property="SelectionBrush" Value="#2967FF"/>
+                            <Setter Property="SelectionTextBrush" Value="White"/>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </StackPanel>
+
+            <!-- Gebäude ID -->
+            <StackPanel Orientation="Vertical" Margin="260,50,0,0">
+                <Label Content="Gebäude ID" Foreground="White"/>
+                <TextBox x:Name="TextboxgebaeudeID" 
+                         Height="30" Width="200"
+                         Background="#272B2F"
+                         Foreground="White"
+                         BorderBrush="#2967FF"
+                         BorderThickness="1"
+                         Padding="5" HorizontalAlignment="Left">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="CaretBrush" Value="White"/>
+                            <Setter Property="SelectionBrush" Value="#2967FF"/>
+                            <Setter Property="SelectionTextBrush" Value="White"/>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </StackPanel>
+
+            <!-- Eigenschaften -->
+            <StackPanel Orientation="Vertical" Margin="30,130,0,0">
+                <Label Content="Eigenschaften (bei keinen leer lassen)" Foreground="White"/>
+
+                <!-- Checkboxen -->
+                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                    <CheckBox x:Name="CheckBoxDoppelzimmer" Content="Doppelzimmer" Foreground="White" Margin="0,5,0,5">
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox">
+                                <Style.Resources>
+                                    <SolidColorBrush x:Key="CheckBoxFillNormal" Color="#272B2F"/>
+                                    <SolidColorBrush x:Key="CheckBoxStroke" Color="#2967FF"/>
+                                </Style.Resources>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                    <CheckBox x:Name="CheckBoxSuite" Content="Suite" Foreground="White" Margin="0,5,0,5"/>
+                    <CheckBox x:Name="CheckBoxHauptstrasse" Content="An der Hauptstraße" Foreground="White" Margin="0,5,0,5"/>
+                    <CheckBox x:Name="CheckBoxKuehlschrank" Content="Kühlschrank" Foreground="White" Margin="0,5,0,5"/>
+                    <CheckBox x:Name="CheckBoxTerasse" Content="Terrasse" Foreground="White" Margin="0,5,0,5"/>
+                    <CheckBox x:Name="CheckBoxGrosserBalkon" Content="Großer Balkon" Foreground="White" Margin="0,5,0,5"/>
+                    <CheckBox x:Name="CheckBoxKleinerBalkon" Content="Kleiner Balkon" Foreground="White" Margin="0,5,0,5"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Button -->
+            <Button Content="Hinzufügen" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Bottom" 
+                    Margin="0,0,0,20" 
+                    Width="180" 
+                    Height="35"
+                    Click="Button_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#212020"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="#212020"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
     </Grid>
 </Page>

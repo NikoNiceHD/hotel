@@ -6,20 +6,129 @@
       xmlns:local="clr-namespace:hotel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Buchung_bearbeiten">
+      Title="Buchung_bearbeiten"
+      Background="#1a1c21">
 
-    <Grid Background="White">
-       
-        <TextBox x:Name="sucheTextBox" Margin="10,10,10,0" Height="30" 
-                 VerticalAlignment="Top"  
-                 TextChanged="SucheTextBox_TextChanged"/>
+    <Grid>
+        <!-- Linker Rand -->
+        <Border Width="10" 
+                Background="#1a1c21" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Stretch" />
 
-        
-        <DataGrid x:Name="buchungenDataGrid" Margin="10,50,10,60" AutoGenerateColumns="True" 
-                  SelectionMode="Single" SelectionUnit="FullRow" 
-                  SelectionChanged="BuchungenDataGrid_SelectionChanged"/>
+        <!-- Rechter Rand -->
+        <Border Width="10" 
+                Background="#1a1c21" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Stretch" />
 
-        <Button Content="Buchung bearbeiten" HorizontalAlignment="Center" VerticalAlignment="Bottom" 
-                Margin="0,0,0,20" Width="150" Click="BearbeitenButton_Click"/>
+        <Grid Margin="10,10,10,10">
+            <!-- Suchfeld -->
+            <TextBox x:Name="sucheTextBox" 
+                     Margin="10,10,10,0" 
+                     Height="30" 
+                     VerticalAlignment="Top"  
+                     TextChanged="SucheTextBox_TextChanged"
+                     Background="#272B2F"
+                     Foreground="White"
+                     BorderBrush="#2967FF"
+                     BorderThickness="1"
+                     Padding="5">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="CaretBrush" Value="White"/>
+                        <Setter Property="SelectionBrush" Value="#2967FF"/>
+                        <Setter Property="SelectionTextBrush" Value="White"/>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <!-- DataGrid -->
+            <DataGrid x:Name="buchungenDataGrid" 
+                      Margin="10,50,10,60" 
+                      AutoGenerateColumns="True" 
+                      SelectionMode="Single" 
+                      SelectionUnit="FullRow" 
+                      SelectionChanged="BuchungenDataGrid_SelectionChanged"
+                      Background="#272B2F"
+                      Foreground="White"
+                      BorderBrush="#2967FF"
+                      RowBackground="#1a1c21"
+                      AlternatingRowBackground="#272B2F"
+                      HeadersVisibility="Column"
+                      IsReadOnly="True">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#2967FF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Padding" Value="10"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Style.Triggers>
+                            <!-- Hervorheben der ausgewählten Zellen -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Style.Triggers>
+                            <!-- Ausgewählte Zeile blau leuchten lassen -->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+            </DataGrid>
+
+            <!-- Button -->
+            <Button Content="Buchung bearbeiten" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Bottom" 
+                    Margin="0,0,0,20" 
+                    Width="150" 
+                    Click="BearbeitenButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#212020"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2967FF"/>
+                                <Setter Property="Foreground" Value="#212020"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
     </Grid>
 </Page>
