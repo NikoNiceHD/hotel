@@ -10,14 +10,14 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+        
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
-        <!-- Rechter Rand -->
+   
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
         <Grid Margin="10">
-            <!-- Suchfeld mit Platzhalter -->
+           
             <Grid Margin="10,10,10,0" VerticalAlignment="Top">
                 <TextBox x:Name="searchTextBox" 
                          Height="30" 
@@ -36,7 +36,7 @@
                     </TextBox.Style>
                 </TextBox>
 
-                <!-- Platzhaltertext -->
+               
                 <TextBlock IsHitTestVisible="False" 
                            Text="Suche nach Kunden..." 
                            VerticalAlignment="Center" 
@@ -56,7 +56,7 @@
                 </TextBlock>
             </Grid>
 
-            <!-- DataGrid zur Anzeige und Bearbeitung der Kundendaten -->
+          
             <DataGrid x:Name="dtgrid" 
                       Margin="10,50,10,60" 
                       AutoGenerateColumns="False" 
@@ -72,7 +72,7 @@
                       SelectionUnit="FullRow"
                       IsReadOnly="False">
 
-                <!-- Spaltenkopf-Design -->
+               
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#2967FF"/>
@@ -82,7 +82,7 @@
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
 
-                <!-- Zellen-Design -->
+               
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -99,7 +99,7 @@
                     </Style>
                 </DataGrid.CellStyle>
 
-                <!-- Zeilenstil -->
+                
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="Transparent"/>
@@ -113,7 +113,7 @@
                     </Style>
                 </DataGrid.RowStyle>
 
-                <!-- Spalten -->
+              
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding id}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Vorname" Binding="{Binding vorname}"/>
@@ -126,7 +126,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <!-- Button zum Speichern der Änderungen -->
+           
             <Button Content="Änderungen speichern" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Bottom" 

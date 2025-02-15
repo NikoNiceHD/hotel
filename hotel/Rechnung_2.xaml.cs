@@ -28,7 +28,7 @@ namespace hotel
                 {
                     connection.Open();
 
-                    // Basis-Rechnungsdaten
+                    
                     string baseQuery = @"
                 SELECT 
                     k.vorname, 
@@ -46,7 +46,7 @@ namespace hotel
                     DataTable baseData = new DataTable();
                     baseData.Load(baseCmd.ExecuteReader());
 
-                    // Zimmer-Vorteile laden
+                    
                     string featuresQuery = @"
                 SELECT DISTINCT
                     e.eigenschaft AS Vorteil,
@@ -65,7 +65,7 @@ namespace hotel
                     DataTable featuresData = new DataTable();
                     featuresData.Load(featuresCmd.ExecuteReader());
 
-                    // Leistungen laden
+
                     string servicesQuery = @"
                 SELECT 
                     l.leistung AS Leistung,
@@ -82,15 +82,13 @@ namespace hotel
                     DataTable servicesData = new DataTable();
                     servicesData.Load(servicesCmd.ExecuteReader());
 
-                    // Kombinierte DataTable erstellen
                     DataTable combinedData = new DataTable();
-                    combinedData.Columns.Add("Typ", typeof(string)); // Typ (Vorteil oder Leistung)
-                    combinedData.Columns.Add("Beschreibung", typeof(string)); // Beschreibung (Vorteil oder Leistung)
-                    combinedData.Columns.Add("Tage/Anzahl", typeof(int)); // Tage oder Anzahl
-                    combinedData.Columns.Add("Einzelpreis", typeof(decimal)); // Preis pro Tag oder Einzelpreis
-                    combinedData.Columns.Add("Gesamt", typeof(decimal)); // Gesamtkosten
+                    combinedData.Columns.Add("Typ", typeof(string)); 
+                    combinedData.Columns.Add("Beschreibung", typeof(string)); 
+                    combinedData.Columns.Add("Tage/Anzahl", typeof(int)); 
+                    combinedData.Columns.Add("Einzelpreis", typeof(decimal)); 
+                    combinedData.Columns.Add("Gesamt", typeof(decimal)); 
 
-                    // Zimmer-Vorteile zur kombinierten Tabelle hinzufügen
                     foreach (DataRow row in featuresData.Rows)
                     {
                         combinedData.Rows.Add(
@@ -103,7 +101,6 @@ namespace hotel
                         totalGesamt += Convert.ToDecimal(row["Gesamt"]);
                     }
 
-                    // Leistungen zur kombinierten Tabelle hinzufügen
                     foreach (DataRow row in servicesData.Rows)
                     {
                         combinedData.Rows.Add(
@@ -116,7 +113,6 @@ namespace hotel
                         totalGesamt += Convert.ToDecimal(row["Gesamt"]);
                     }
 
-                    // Daten anzeigen
                     if (baseData.Rows.Count > 0)
                     {
                         DataRow baseRow = baseData.Rows[0];
@@ -126,10 +122,8 @@ namespace hotel
                                                        + $"Zeitraum: {((DateTime)baseRow["anfang"]).ToShortDateString()} - "
                                                        + $"{((DateTime)baseRow["ende"]).ToShortDateString()}";
 
-                        // Gesamtpreis anzeigen
                         gesamtpreisTextBlock.Text = $"Gesamtpreis: {totalGesamt:C}";
 
-                        // Kombinierte Daten anzeigen
                         combinedDataGrid.ItemsSource = combinedData.DefaultView;
                     }
                 }

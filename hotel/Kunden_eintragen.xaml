@@ -10,20 +10,20 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+        
         <Border Width="10" 
                 Background="#1a1c21" 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Stretch" />
 
-        <!-- Rechter Rand -->
+        
         <Border Width="10" 
                 Background="#1a1c21" 
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Stretch" />
 
         <Grid Margin="10,10,10,10">
-            <!-- TextBoxen -->
+            
             <TextBox x:Name="textbox_vorname" 
                      HorizontalAlignment="Left" 
                      Margin="77,84,0,0" 
@@ -101,7 +101,7 @@
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
                         <Setter Property="Foreground" Value="#2967FF"/>
-                        <!-- Textfarbe -->
+                        
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="DatePickerTextBox">
@@ -144,7 +144,7 @@
                 </DatePicker.Resources>
             </DatePicker>
 
-            <!-- DatePicker für Einzugsdatum -->
+            
             <DatePicker x:Name="datepicker_einzugsdatum" 
             HorizontalAlignment="Left" 
             Margin="216,238,0,0" 
@@ -160,7 +160,7 @@
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
                         <Setter Property="Foreground" Value="#2967FF"/>
-                        <!-- Textfarbe -->
+                       
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="DatePickerTextBox">
@@ -202,7 +202,7 @@
                     </Style>
                 </DatePicker.Resources>
             </DatePicker>
-            <!-- Labels -->
+            
             <Label Content="Vorname" 
                    HorizontalAlignment="Left" 
                    Margin="77,53,0,0" 
@@ -246,7 +246,7 @@
                    VerticalAlignment="Top"
                    Foreground="White"/>
 
-            <!-- Button -->
+           
             <Button Content="Eintragen" 
                     HorizontalAlignment="Left" 
                     Margin="271,318,0,0" 

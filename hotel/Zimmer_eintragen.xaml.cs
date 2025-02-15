@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MySqlConnector; // MySQL Connector
+using MySqlConnector; 
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,7 +8,7 @@ namespace hotel
 {
     public partial class Zimmer_eintragen : Page
     {
-        // Verbindungszeichenfolge zur MySQL-Datenbank
+       
         private string connectionString = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
 
         public Zimmer_eintragen()
@@ -18,23 +18,23 @@ namespace hotel
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Verbindung zur MySQL-Datenbank herstellen
+           
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
 
-                    // Transaktion starten
+                    
                     using (MySqlTransaction transaction = connection.BeginTransaction())
                     {
                         try
                         {
-                            // Werte aus den TextBoxen auslesen
+                            
                             int zimmerId = int.Parse(TextboxzimmerID.Text);
                             int gebaeudeId = int.Parse(TextboxgebaeudeID.Text);
 
-                            // Überprüfen, ob das Zimmer bereits existiert
+                           
                             string checkZimmerQuery = "SELECT COUNT(*) FROM zimmer WHERE id = @zimmerId";
                             using (MySqlCommand checkCommand = new MySqlCommand(checkZimmerQuery, connection, transaction))
                             {
@@ -44,11 +44,11 @@ namespace hotel
                                 if (zimmerCount > 0)
                                 {
                                     MessageBox.Show("Das Zimmer existiert bereits in der Datenbank.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    return; // Vorgang abbrechen
+                                    return;
                                 }
                             }
 
-                            // Überprüfen der CheckBox-Kombinationen
+                            
                             if (CheckBoxSuite.IsChecked == true && CheckBoxDoppelzimmer.IsChecked == true)
                             {
                                 MessageBox.Show("Ein Zimmer kann nicht gleichzeitig eine Suite und ein Doppelzimmer sein.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -67,26 +67,26 @@ namespace hotel
                                 return;
                             }
 
-                            // Liste für ausgewählte Eigenschaften erstellen
+                            
                             List<int> eigenschaftenIds = new List<int>();
 
-                            // Überprüfen, welche CheckBoxen ausgewählt sind, und die entsprechenden IDs hinzufügen
+                            
                             if (CheckBoxDoppelzimmer.IsChecked == true)
-                                eigenschaftenIds.Add(7); // Doppelzimmer
+                                eigenschaftenIds.Add(7); 
                             if (CheckBoxSuite.IsChecked == true)
-                                eigenschaftenIds.Add(8); // Suite
+                                eigenschaftenIds.Add(8); 
                             if (CheckBoxHauptstrasse.IsChecked == true)
-                                eigenschaftenIds.Add(9); // Sicht zur Hauptstraße heraus
+                                eigenschaftenIds.Add(9); 
                             if (CheckBoxKuehlschrank.IsChecked == true)
-                                eigenschaftenIds.Add(10); // Kühlschrank
+                                eigenschaftenIds.Add(10);
                             if (CheckBoxTerasse.IsChecked == true)
-                                eigenschaftenIds.Add(11); // Terasse
+                                eigenschaftenIds.Add(11); 
                             if (CheckBoxGrosserBalkon.IsChecked == true)
-                                eigenschaftenIds.Add(12); // Großer Balkon
+                                eigenschaftenIds.Add(12); 
                             if (CheckBoxKleinerBalkon.IsChecked == true)
-                                eigenschaftenIds.Add(13); // Kleiner Balkon
+                                eigenschaftenIds.Add(13); 
 
-                            // Zimmer in die Tabelle `zimmer` einfügen
+                            
                             string insertZimmerQuery = "INSERT INTO zimmer (id, gebaeude_id) VALUES (@zimmerId, @gebaeudeId)";
                             using (MySqlCommand command = new MySqlCommand(insertZimmerQuery, connection, transaction))
                             {
@@ -95,7 +95,7 @@ namespace hotel
                                 command.ExecuteNonQuery();
                             }
 
-                            // Verknüpfung zwischen Zimmer und Eigenschaften in `zimmer_hat_eigenschaften` einfügen
+                            
                             foreach (int eigenschaftId in eigenschaftenIds)
                             {
                                 string insertZimmerEigenschaftQuery = @"
@@ -109,14 +109,14 @@ namespace hotel
                                 }
                             }
 
-                            // Transaktion erfolgreich abschließen
+                            
                             transaction.Commit();
 
                             MessageBox.Show("Zimmer erfolgreich eingetragen!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         catch (Exception ex)
                         {
-                            // Transaktion zurückrollen, falls ein Fehler auftritt
+                           
                             transaction.Rollback();
                             MessageBox.Show("Fehler beim Eintragen des Zimmers: " + ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                         }

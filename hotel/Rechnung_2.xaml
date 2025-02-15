@@ -9,12 +9,12 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Ränder -->
+       
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left"/>
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right"/>
 
         <Grid Margin="20">
-            <!-- Rechnungskopf -->
+           
             <StackPanel VerticalAlignment="Top">
                 <TextBlock x:Name="rechnungsDetailsTextBlock"
                            Foreground="White"
@@ -22,7 +22,7 @@
                            Margin="0,0,0,10"
                            TextWrapping="Wrap"/>
 
-                <!-- Gesamtpreis -->
+               
                 <TextBlock x:Name="gesamtpreisTextBlock"
                            Foreground="White"
                            FontSize="18"
@@ -31,7 +31,7 @@
                            HorizontalAlignment="Left"/>
             </StackPanel>
 
-            <!-- Kombinierte Daten -->
+            
             <DataGrid x:Name="combinedDataGrid"
                       AutoGenerateColumns="False"
                       Margin="0,150,0,0"
@@ -61,7 +61,7 @@
                                       Width="2*"/>
                 </DataGrid.Columns>
 
-                <!-- Stile -->
+                
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#2967FF"/>

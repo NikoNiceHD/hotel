@@ -10,20 +10,20 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+       
         <Border Width="10" 
                 Background="#1a1c21" 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Stretch" />
 
-        <!-- Rechter Rand -->
+       
         <Border Width="10" 
                 Background="#1a1c21" 
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Stretch" />
 
         <Grid Margin="10,10,10,10">
-            <!-- Suchfeld mit Platzhalter -->
+           
             <Grid Margin="10,10,10,0" VerticalAlignment="Top">
                 <TextBox x:Name="sucheTextBox" 
                          Height="30" 
@@ -42,7 +42,7 @@
                     </TextBox.Style>
                 </TextBox>
 
-                <!-- Platzhaltertext -->
+                
                 <TextBlock IsHitTestVisible="False" 
                            Text="Suche nach Kunden oder Rechnungs-ID..." 
                            VerticalAlignment="Center" 
@@ -62,7 +62,7 @@
                 </TextBlock>
             </Grid>
 
-            <!-- Überschrift -->
+            
             <Label Content="Kunden und Rechnungen" 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top" 
@@ -71,7 +71,7 @@
                    Margin="0,50,0,0"
                    Foreground="White" />
 
-            <!-- DataGrid zur Anzeige der Kunden und Rechnungs-IDs -->
+            
             <DataGrid x:Name="KundenDataGrid" 
                       AutoGenerateColumns="True"
                 Margin="10,90,10,10" 
@@ -98,7 +98,7 @@
                         <Setter Property="Foreground" Value="White"/>
                         <Setter Property="Background" Value="Transparent"/>
                         <Style.Triggers>
-                            <!-- Hervorheben der ausgewählten Zellen -->
+                           
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="#2967FF"/>
                                 <Setter Property="Foreground" Value="White"/>
@@ -113,7 +113,7 @@
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="Foreground" Value="White"/>
                         <Style.Triggers>
-                            <!-- Ausgewählte Zeile blau leuchten lassen -->
+                           
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="#2967FF"/>
                                 <Setter Property="Foreground" Value="White"/>

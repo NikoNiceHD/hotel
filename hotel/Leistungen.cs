@@ -18,9 +18,9 @@ namespace hotel
             private DateTime _endDatum;
             private bool _isSelected;
 
-            public int LeistungID { get; set; } // ID der Leistung
-            public string LeistungName { get; set; } // Name der Leistung
-            public decimal Preis { get; set; } // Preis der Leistung
+            public int LeistungID { get; set; } 
+            public string LeistungName { get; set; } 
+            public decimal Preis { get; set; } 
 
             public bool IsSelected
             {
@@ -44,7 +44,7 @@ namespace hotel
                     {
                         _startDatum = value;
                         OnPropertyChanged(nameof(StartDatum));
-                        OnPropertyChanged(nameof(StartDatumLabel)); // Aktualisiere das Label
+                        OnPropertyChanged(nameof(StartDatumLabel));
                     }
                 }
             }
@@ -58,12 +58,12 @@ namespace hotel
                     {
                         _endDatum = value;
                         OnPropertyChanged(nameof(EndDatum));
-                        OnPropertyChanged(nameof(EndDatumLabel)); // Aktualisiere das Label
+                        OnPropertyChanged(nameof(EndDatumLabel));
                     }
                 }
             }
 
-            // Neue Eigenschaften für die Labels
+          
             public string StartDatumLabel => StartDatum.ToString("dd.MM.yyyy");
             public string EndDatumLabel => EndDatum.ToString("dd.MM.yyyy");
 
@@ -75,7 +75,7 @@ namespace hotel
             }
         }
 
-        // Methode zum Laden der Leistungen
+        
         public List<LeistungViewModel> LadeLeistungen(DateTime startDatum, DateTime endDatum)
         {
             List<LeistungViewModel> leistungen = new List<LeistungViewModel>();
@@ -92,16 +92,16 @@ namespace hotel
                     DataTable dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
 
-                    // Konvertiere die Daten in eine Liste von LeistungViewModel
+                    
                     leistungen = dataTable.AsEnumerable()
                         .Select(row => new LeistungViewModel
                         {
                             LeistungID = row.Field<int>("id"),
                             LeistungName = row.Field<string>("leistung"),
                             Preis = row.Field<decimal>("preis"),
-                            IsSelected = false, // Standardmäßig nicht ausgewählt
-                            StartDatum = startDatum, // Standardwert: Startdatum der Buchung
-                            EndDatum = endDatum     // Standardwert: Enddatum der Buchung
+                            IsSelected = false, 
+                            StartDatum = startDatum,
+                            EndDatum = endDatum     
                         }).ToList();
                 }
                 catch (Exception ex)
@@ -113,10 +113,10 @@ namespace hotel
             return leistungen;
         }
 
-        // Methode zum Erstellen einer Zeichenkette mit den ausgewählten Leistungen
+        
         public string GetAusgewaehlteLeistungen(List<LeistungViewModel> leistungen)
         {
-            // Filtere die ausgewählten Leistungen
+           
             var ausgewaehlteLeistungen = leistungen.Where(l => l.IsSelected).ToList();
 
             if (ausgewaehlteLeistungen.Count == 0)
@@ -124,7 +124,7 @@ namespace hotel
                 return "Keine Leistungen ausgewählt.";
             }
 
-            // Erstelle eine Zeichenkette mit den Namen der ausgewählten Leistungen
+            
             string leistungenText = "Ausgewählte Leistungen:\n";
             foreach (var leistung in ausgewaehlteLeistungen)
             {

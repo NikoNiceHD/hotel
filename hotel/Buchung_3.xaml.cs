@@ -44,7 +44,6 @@ namespace hotel
                 return;
             }
 
-            // Navigiere zur Buchung_3-Seite
             Buchung_3 buchung3Page = new Buchung_3(kundenID, startDatum, endDatum);
             this.NavigationService.Navigate(buchung3Page);
         }

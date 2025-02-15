@@ -10,13 +10,13 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+        
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-        <!-- Rechter Rand -->
+        
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
         <Grid Margin="10">
-            <!-- TextBlock für ausgewählte Kunden-ID -->
+            
             <TextBlock x:Name="textbox_kundenid" 
                        HorizontalAlignment="Center" 
                        Margin="0,20,0,0" 
@@ -24,11 +24,11 @@
                        FontSize="24"
                        Foreground="White"/>
 
-            <!-- Bereich für Startdatum -->
+            
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="131,150,0,0" VerticalAlignment="Top">
-                <!-- Überschrift -->
+                
                 <Label Content="Startdatum" Foreground="White"/>
-                <!-- DatePicker mit Platzhalter -->
+                
                 <DatePicker x:Name="datepicker_start" 
                             Width="120"
                             Background="#272B2F"
@@ -43,7 +43,7 @@
                             <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
                             <Setter Property="Foreground" Value="#2967FF"/>
-                            <!-- Textfarbe -->
+                            
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="DatePickerTextBox">
@@ -87,11 +87,11 @@
                 </DatePicker>
             </StackPanel>
 
-            <!-- Bereich für Enddatum -->
+           
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="510,150,0,0" VerticalAlignment="Top">
-                <!-- Überschrift -->
+                
                 <Label Content="Enddatum" Foreground="White"/>
-                <!-- DatePicker mit Platzhalter -->
+                
                 <DatePicker x:Name="datepicker_ende" 
                             Width="120"
                             Background="#272B2F"
@@ -106,7 +106,7 @@
                             <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
                             <Setter Property="Foreground" Value="#2967FF"/>
-                            <!-- Textfarbe -->
+                            
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="DatePickerTextBox">
@@ -150,7 +150,7 @@
                 </DatePicker>
             </StackPanel>
 
-            <!-- Button zum Erstellen der Buchung -->
+            
             <Button Content="Buchung erstellen" 
                     HorizontalAlignment="Center" 
                     Margin="0,312,0,0" 

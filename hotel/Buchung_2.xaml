@@ -10,14 +10,14 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+        
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
         <!-- Rechter Rand -->
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
         <Grid Margin="10">
-            <!-- Suchfeld mit Platzhalter -->
+            
             <Grid Margin="10,10,10,0" VerticalAlignment="Top">
                 <TextBox x:Name="searchTextBox" 
                          Height="30" 
@@ -37,7 +37,7 @@
                     </TextBox.Style>
                 </TextBox>
 
-                <!-- Platzhaltertext -->
+               
                 <TextBlock IsHitTestVisible="False" 
                            Text="Suche nach Kunden..." 
                            VerticalAlignment="Center" 
@@ -57,7 +57,7 @@
                 </TextBlock>
             </Grid>
 
-            <!-- DataGrid zur Anzeige und Bearbeitung der Buchungsdaten -->
+           
             <DataGrid x:Name="dtgrid" 
                       Margin="10,50,10,60" 
                       AutoGenerateColumns="True" 
@@ -74,7 +74,7 @@
                       IsReadOnly="False"
                       MouseDoubleClick="DataGrid_MouseDoubleClick">
 
-                <!-- Spaltenkopf-Design -->
+                
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#2967FF"/>
@@ -84,7 +84,7 @@
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
 
-                <!-- Zellen-Design -->
+               
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -101,7 +101,7 @@
                     </Style>
                 </DataGrid.CellStyle>
 
-                <!-- Zeilenstil -->
+
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="Transparent"/>

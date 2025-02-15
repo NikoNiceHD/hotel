@@ -16,7 +16,7 @@ namespace hotel
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Überprüfen, ob alle Felder ausgefüllt sind
+
             if (string.IsNullOrEmpty(textbox_vorname.Text) || string.IsNullOrEmpty(textbox_nachname.Text) ||
                 datepicker_geburtstag.SelectedDate == null || string.IsNullOrEmpty(textbox_plz.Text) ||
                 string.IsNullOrEmpty(textbox_ort.Text) || string.IsNullOrEmpty(textbox_strasse_hausnummer.Text) ||
@@ -26,24 +26,24 @@ namespace hotel
                 return;
             }
 
-            // Überprüfen, ob die Postleitzahl eine fünfstellige Zahl ist
+
             if (!int.TryParse(textbox_plz.Text, out int plz) || textbox_plz.Text.Length != 5)
             {
                 MessageBox.Show("Die Postleitzahl muss eine fünfstellige Zahl sein.");
                 return;
             }
 
-            // Überprüfen, ob die Straße und Hausnummer korrekt eingegeben wurden
+
             string[] strasseUndHausnummer = textbox_strasse_hausnummer.Text.Trim().Split(' ');
 
-            // Mindestens zwei Teile (Straße und Hausnummer) müssen vorhanden sein
+
             if (strasseUndHausnummer.Length < 2)
             {
                 MessageBox.Show("Bitte geben Sie sowohl die Straße als auch die Hausnummer ein (z.B. 'Musterstraße 12').");
                 return;
             }
 
-            // Überprüfen, ob der letzte Teil eine Zahl ist (Hausnummer)
+
             string hausnummerTeil = strasseUndHausnummer[strasseUndHausnummer.Length - 1];
             if (!int.TryParse(hausnummerTeil, out int hausnummer))
             {

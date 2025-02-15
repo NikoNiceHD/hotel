@@ -10,27 +10,27 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+       
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
-        <!-- Rechter Rand -->
+      
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- DatePicker -->
+                
                 <RowDefinition Height="Auto"/>
-                <!-- Überschrift Freie Zimmer -->
+               
                 <RowDefinition Height="*"/>
-                <!-- DataGrid Freie Zimmer -->
+               
                 <RowDefinition Height="Auto"/>
-                <!-- Überschrift Belegte Zimmer -->
+                
                 <RowDefinition Height="*"/>
-                <!-- DataGrid Belegte Zimmer -->
+              
             </Grid.RowDefinitions>
 
-            <!-- DatePicker -->
+          
             <DatePicker x:Name="datePicker"
                         Foreground="#2967FF"
                         Background="#272B2F"
@@ -46,7 +46,7 @@
                                 <Setter Property="BorderThickness" Value="0"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Setter Property="Foreground" Value="#2967FF"/>
-                                <!-- Textfarbe -->
+                               
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
@@ -92,7 +92,7 @@
                 </DatePicker.Style>
             </DatePicker>
 
-            <!-- Überschrift Freie Zimmer -->
+            
             <Label Content="Freie Zimmer" 
                    Grid.Row="1"
                    Foreground="White"
@@ -100,7 +100,7 @@
                    FontWeight="Bold"
                    Margin="0,0,0,5"/>
 
-            <!-- DataGrid für freie Zimmer -->
+           
             <DataGrid x:Name="dtgridFreieZimmer" 
                       Grid.Row="2"
                       ItemsSource="{Binding}"
@@ -115,7 +115,7 @@
                       HeadersVisibility="Column"
                       IsReadOnly="True">
 
-                <!-- Stile analog zum ursprünglichen DataGrid -->
+                
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#2967FF"/>
@@ -142,7 +142,7 @@
                 </DataGrid.CellStyle>
             </DataGrid>
 
-            <!-- Überschrift Belegte Zimmer -->
+            
             <Label Content="Belegte Zimmer" 
                    Grid.Row="3"
                    Foreground="White"
@@ -150,7 +150,7 @@
                    FontWeight="Bold"
                    Margin="0,20,0,5"/>
 
-            <!-- DataGrid für belegte Zimmer -->
+            
             <DataGrid x:Name="dtgridBelegteZimmer" 
                       Grid.Row="4"
                       ItemsSource="{Binding}"
@@ -164,7 +164,7 @@
                       HeadersVisibility="Column"
                       IsReadOnly="True">
 
-                <!-- Identische Stildefinitionen -->
+              
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#2967FF"/>

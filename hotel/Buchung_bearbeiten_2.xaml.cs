@@ -111,23 +111,23 @@ namespace hotel
                 {
                     connection.Open();
 
-                    // Lösche alle bestehenden Leistungen für diese Buchung
+                   
                     string deleteQuery = "DELETE FROM buchung_hat_leistung WHERE buchung_id = @buchungID;";
                     MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, connection);
                     deleteCmd.Parameters.AddWithValue("@buchungID", buchungID);
                     deleteCmd.ExecuteNonQuery();
 
-                    // Füge die ausgewählten Leistungen hinzu
+                    
                     foreach (CheckBox checkBox in leistungenStackPanel.Children)
                     {
                         if (checkBox.IsChecked == true)
                         {
-                            // Setze die Anzahl automatisch auf 1
+                            
                             string insertQuery = "INSERT INTO buchung_hat_leistung (buchung_id, leistung_id, anzahl) VALUES (@buchungID, @leistungID, @anzahl);";
                             MySqlCommand insertCmd = new MySqlCommand(insertQuery, connection);
                             insertCmd.Parameters.AddWithValue("@buchungID", buchungID);
                             insertCmd.Parameters.AddWithValue("@leistungID", checkBox.Tag);
-                            insertCmd.Parameters.AddWithValue("@anzahl", 1); // Anzahl wird automatisch auf 1 gesetzt
+                            insertCmd.Parameters.AddWithValue("@anzahl", 1); 
                             insertCmd.ExecuteNonQuery();
                         }
                     }

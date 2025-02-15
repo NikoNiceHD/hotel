@@ -11,7 +11,7 @@ namespace hotel
     public partial class Buchung_bearbeiten : Page
     {
         private string connectionString = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
-        private DataView buchungenDataView; // Für Filterung
+        private DataView buchungenDataView; 
 
         private int ausgewaehlteBuchungID = -1;
 
@@ -46,7 +46,7 @@ namespace hotel
                     DataTable dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
 
-                    buchungenDataView = dataTable.DefaultView; // Setze die DataView
+                    buchungenDataView = dataTable.DefaultView; 
                     buchungenDataGrid.ItemsSource = buchungenDataView;
                 }
                 catch (Exception ex)
@@ -60,15 +60,15 @@ namespace hotel
         {
             if (buchungenDataView != null)
             {
-                // Filtert die DataView basierend auf der Eingabe
+               
                 string filterText = sucheTextBox.Text.Trim();
                 if (string.IsNullOrEmpty(filterText))
                 {
-                    buchungenDataView.RowFilter = ""; // Kein Filter
+                    buchungenDataView.RowFilter = "";
                 }
                 else
                 {
-                    // Filtere nach Buchungs-ID, Vorname, Nachname oder Vor- und Nachname kombiniert
+                   
                     buchungenDataView.RowFilter = $@"
                 CONVERT([Buchungs-ID], 'System.String') LIKE '%{filterText}%' OR
                 [Kunden-Vorname] LIKE '%{filterText}%' OR

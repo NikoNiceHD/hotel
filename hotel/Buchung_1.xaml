@@ -10,14 +10,13 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+        
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
-        <!-- Rechter Rand -->
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
         <Grid Margin="10">
-            <!-- Button Buchung Erstellen -->
+           
             <Button Content="Buchung Erstellen" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
@@ -51,7 +50,7 @@
                 </Button.Style>
             </Button>
 
-            <!-- Button Buchung Bearbeiten -->
+           
             <Button Content="Buchung Bearbeiten" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
@@ -85,7 +84,7 @@
                 </Button.Style>
             </Button>
 
-            <!-- Frame für Buchungsinhalte -->
+            
             <Frame x:Name="Buchung" 
                    HorizontalAlignment="Stretch" 
                    VerticalAlignment="Stretch" 

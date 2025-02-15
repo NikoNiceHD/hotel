@@ -10,20 +10,20 @@
       Background="#1a1c21">
 
     <Grid>
-        <!-- Linker Rand -->
+       
         <Border Width="10" 
                 Background="#1a1c21" 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Stretch" />
 
-        <!-- Rechter Rand -->
+       
         <Border Width="10" 
                 Background="#1a1c21" 
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Stretch" />
 
         <Grid Margin="10,10,10,10">
-            <!-- Buttons -->
+          
             <Button Content="Kunden Eintragen" 
                     HorizontalAlignment="Left" 
                     VerticalAlignment="Top" 
@@ -86,7 +86,7 @@
                 </Button.Style>
             </Button>
 
-            <!-- Frame -->
+            
             <Frame x:Name="kunden"/>
         </Grid>
     </Grid>

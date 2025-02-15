@@ -36,7 +36,7 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#FF2967FF"/>
-                                        <!--ändert die farbe beim drüberhovern -->
+
                                         <Setter Property="Foreground" Value="#212020"/>
                                     </Trigger>
                                 </Style.Triggers>
@@ -63,7 +63,7 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#FF2967FF"/>
-                                        <!--ändert die farbe beim drüberhovern -->
+
                                         <Setter Property="Foreground" Value="#212020"/>
                                     </Trigger>
                                 </Style.Triggers>
@@ -89,7 +89,7 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#FF2967FF"/>
-                                        <!--ändert die farbe beim drüberhovern -->
+
                                         <Setter Property="Foreground" Value="#212020"/>
                                     </Trigger>
                                 </Style.Triggers>
@@ -115,7 +115,7 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="#FF2967FF"/>
-                                        <!--ändert die farbe beim drüberhovern -->
+
                                         <Setter Property="Foreground" Value="#212020"/>
                                     </Trigger>
                                 </Style.Triggers>
@@ -126,6 +126,16 @@
 
             </Grid>
             <Frame x:Name="main" Margin="140,0,0,0"/>
+
+
+            <TextBlock Text="Willkommen beim Hotel Willike"
+                       Foreground="#FF2967FF"
+                       FontSize="32
+"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Margin="330,10,0,0"/>
         </Grid>
     </Border>
 </Window>

@@ -22,7 +22,7 @@ namespace hotel
         public Kunden_bearbeiten()
         {
             InitializeComponent();
-            LoadData(baseQuery); // Load all customers initially
+            LoadData(baseQuery);
         }
 
         private void LoadData(string query)
@@ -74,14 +74,14 @@ namespace hotel
             }
             else
             {
-                LoadData(baseQuery); // Load all data when search is empty
+                LoadData(baseQuery); 
             }
         }
 
-        // Methode zum Speichern der Änderungen in die Datenbank mit Transaktion
+       
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Bestätigungsdialog anzeigen
+            
             MessageBoxResult result = MessageBox.Show("Möchten Sie die Änderungen speichern?", "Bestätigung", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
@@ -90,17 +90,17 @@ namespace hotel
                 {
                     conn.Open();
 
-                    // Beginne eine Transaktion
+                    
                     using (MySqlTransaction transaction = conn.BeginTransaction())
                     {
                         try
                         {
-                            // Durchlaufe alle geänderten Zeilen im DataTable
+                            
                             foreach (DataRow row in dataTable.Rows)
                             {
-                                if (row.RowState == DataRowState.Modified) // Nur geänderte Zeilen berücksichtigen
+                                if (row.RowState == DataRowState.Modified) 
                                 {
-                                    // Kundendaten aktualisieren
+                                   
                                     string updateKundeQuery = @"
                                         UPDATE kunde 
                                         SET vorname = @vorname, 
@@ -117,7 +117,7 @@ namespace hotel
                                         cmd.ExecuteNonQuery();
                                     }
 
-                                    // Adressdaten aktualisieren
+                                    
                                     string updateAdresseQuery = @"
                                         UPDATE adresse 
                                         SET strasse = @strasse, 
@@ -134,13 +134,13 @@ namespace hotel
                                 }
                             }
 
-                            // Transaktion bestätigen
+                           
                             transaction.Commit();
                             MessageBox.Show("Änderungen erfolgreich gespeichert!");
                         }
                         catch (Exception ex)
                         {
-                            // Transaktion rückgängig machen
+                           
                             transaction.Rollback();
                             MessageBox.Show("Fehler beim Speichern der Daten: " + ex.Message);
                         }

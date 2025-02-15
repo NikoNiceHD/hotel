@@ -9,7 +9,7 @@ namespace hotel
         {
             string connectstring = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
             MySqlConnection conn = new MySqlConnection(connectstring);
-            return conn; // Verbindung wird zurückgegeben, aber nicht geöffnet
+            return conn; 
         }
     }
 }
