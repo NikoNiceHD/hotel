@@ -23,25 +23,44 @@
                 VerticalAlignment="Stretch" />
 
         <Grid Margin="10,10,10,10">
-            <!-- Suchfeld -->
-            <TextBox x:Name="sucheTextBox" 
-                     Margin="10,10,10,0" 
-                     Height="30" 
-                     VerticalAlignment="Top"  
-                     TextChanged="SucheTextBox_TextChanged"
-                     Background="#272B2F"
-                     Foreground="White"
-                     BorderBrush="#2967FF"
-                     BorderThickness="1"
-                     Padding="5">
-                <TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="CaretBrush" Value="White"/>
-                        <Setter Property="SelectionBrush" Value="#2967FF"/>
-                        <Setter Property="SelectionTextBrush" Value="White"/>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            <!-- Suchfeld mit Platzhalter -->
+            <Grid Margin="10,10,10,0" VerticalAlignment="Top">
+                <TextBox x:Name="sucheTextBox" 
+                         Height="30" 
+                         TextChanged="SucheTextBox_TextChanged"
+                         Background="#272B2F"
+                         Foreground="White"
+                         BorderBrush="#2967FF"
+                         BorderThickness="1"
+                         Padding="5">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="CaretBrush" Value="White"/>
+                            <Setter Property="SelectionBrush" Value="#2967FF"/>
+                            <Setter Property="SelectionTextBrush" Value="White"/>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <!-- Platzhaltertext -->
+                <TextBlock IsHitTestVisible="False" 
+                           Text="Suche nach Buchungen..." 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           Margin="10,0,0,0" 
+                           Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=sucheTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
             <!-- DataGrid -->
             <DataGrid x:Name="buchungenDataGrid" 

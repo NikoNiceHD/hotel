@@ -10,12 +10,11 @@
 
     <Page.Resources>
         <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        
-            <!-- Stil für die DatePickerTextBox -->
-            <Style TargetType="{x:Type DatePickerTextBox}">
-                <Setter Property="Text" Value="{Binding SelectedDate, StringFormat=\{0:dd.MM.yyyy\}, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}"/>
-            </Style>
-        
+
+        <!-- Stil für die DatePickerTextBox -->
+        <Style TargetType="{x:Type DatePickerTextBox}">
+            <Setter Property="Text" Value="{Binding SelectedDate, StringFormat=\{0:dd.MM.yyyy\}, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}"/>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -84,7 +83,7 @@
             <!-- ListView für verfügbare Leistungen -->
             <TextBlock Text="Optionale Leistungen:" FontSize="16" Margin="0,10,0,10" Foreground="White"/>
             <ListView x:Name="leistungenListView" Width="600" Height="150" 
-          Background="#272B2F" Foreground="White" BorderBrush="#2967FF">
+                      Background="#272B2F" Foreground="White" BorderBrush="#2967FF">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -98,55 +97,127 @@
                             </CheckBox>
 
                             <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <TextBlock Text="Startdatum:" Margin="10,5,0,0" Foreground="White"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <!-- Label für Startdatum -->
-                                    <Label x:Name="label_fernsehen_anfang" 
-               Foreground="White"
-               Content="{Binding StartDatum}"/>
-                                    <DatePicker x:Name="fernsehen_anfang" 
-                    SelectedDate="{Binding StartDatum, UpdateSourceTrigger=PropertyChanged}" 
-                    DisplayDateStart="{Binding DataContext.startDatum, RelativeSource={RelativeSource AncestorType=Page}}"
-                    DisplayDateEnd="{Binding DataContext.endDatum, RelativeSource={RelativeSource AncestorType=Page}}"
-                    Margin="10,0,0,5"
-                    Width="40"
-                    Background="#272B2F"
-                    Foreground="White"
-                    BorderBrush="#2967FF"
-                    Language="de-DE"
-                    SelectedDateChanged="DatePicker_SelectedDateChanged">
-                                        <DatePicker.Resources>
-                                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </Style>
-                                        </DatePicker.Resources>
-                                    </DatePicker>
-                                </StackPanel>
+                                <!-- Startdatum -->
+                                <DatePicker x:Name="fernsehen_anfang" 
+                                            SelectedDate="{Binding StartDatum, UpdateSourceTrigger=PropertyChanged}" 
+                                            DisplayDateStart="{Binding DataContext.startDatum, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            DisplayDateEnd="{Binding DataContext.endDatum, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            Margin="10,5,0,5"
+                                            Width="120"
+                                            Background="#272B2F"
+                                            Foreground="#2967FF"
+                                            BorderBrush="#2967FF"
+                                            Language="de-DE"
+                                            SelectedDateChanged="DatePicker_SelectedDateChanged">
+                                    <DatePicker.Resources>
+                                        <Style TargetType="DatePickerTextBox">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Foreground" Value="#2967FF"/>
+                                            <!-- Textfarbe -->
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="DatePickerTextBox">
+                                                        <Grid>
+                                                            <Grid.Resources>
+                                                                <SolidColorBrush x:Key="WatermarkBrush" Color="#FFAAAAAA"/>
+                                                            </Grid.Resources>
+                                                            <VisualStateManager.VisualStateGroups>
+                                                                <VisualStateGroup x:Name="WatermarkStates">
+                                                                    <VisualState x:Name="Unwatermarked"/>
+                                                                    <VisualState x:Name="Watermarked">
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_Watermark"/>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                </VisualStateGroup>
+                                                            </VisualStateManager.VisualStateGroups>
+                                                            <Border x:Name="Border" 
+                                                                    Background="Transparent" 
+                                                                    BorderBrush="Transparent" 
+                                                                    BorderThickness="0">
+                                                                <Grid>
+                                                                    <ContentControl x:Name="PART_Watermark" 
+                                                                                    Content="Startdatum auswählen" 
+                                                                        Foreground="#FFAAAAAA" 
+                                                                                    IsHitTestVisible="False" 
+                                                                                    Opacity="0"
+                                                                                    VerticalAlignment="Center"
+                                                                                    Margin="5,0,0,0"/>
+                                                                        <ScrollViewer x:Name="PART_ContentHost" 
+                                                                                  VerticalAlignment="Center"
+                                                                                  Margin="5,0,0,0"/>
+                                                                </Grid>
+                                                            </Border>
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DatePicker.Resources>
+                                </DatePicker>
 
-                                <TextBlock Text="Enddatum:" Margin="10,5,0,0" Foreground="White"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <!-- Label für Enddatum -->
-                                    <Label x:Name="label_fernsehen_ende" 
-               Foreground="White"
-               Content="{Binding EndDatum, StringFormat=dd.MM.yyyy}"/>
-                                    <DatePicker x:Name="fernsehen_ende" 
-                    SelectedDate="{Binding EndDatum, UpdateSourceTrigger=PropertyChanged}" 
-                    DisplayDateStart="{Binding StartDatum, UpdateSourceTrigger=PropertyChanged}"
-                    DisplayDateEnd="{Binding DataContext.endDatum, RelativeSource={RelativeSource AncestorType=Page}}"
-                    Margin="10,0,0,5"
-                    Width="40"
-                    Background="#272B2F"
-                    Foreground="White"
-                    BorderBrush="#2967FF"
-                    Language="de-DE"
-                    SelectedDateChanged="DatePicker_SelectedDateChanged">
-                                        <DatePicker.Resources>
-                                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </Style>
-                                        </DatePicker.Resources>
-                                    </DatePicker>
-                                </StackPanel>
+                                <!-- Enddatum -->
+                                <DatePicker x:Name="fernsehen_ende" 
+                                            SelectedDate="{Binding EndDatum, UpdateSourceTrigger=PropertyChanged}" 
+                                            DisplayDateStart="{Binding StartDatum, UpdateSourceTrigger=PropertyChanged}"
+                                            DisplayDateEnd="{Binding DataContext.endDatum, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            Margin="10,5,0,5"
+                                            Width="120"
+                                            Background="#272B2F"
+                                            Foreground="#2967FF"
+                                            BorderBrush="#2967FF"
+                                            Language="de-DE"
+                                            SelectedDateChanged="DatePicker_SelectedDateChanged">
+                                    <DatePicker.Resources>
+                                        <Style TargetType="DatePickerTextBox">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Foreground" Value="#2967FF"/>
+                                            <!-- Textfarbe -->
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="DatePickerTextBox">
+                                                        <Grid>
+                                                            <Grid.Resources>
+                                                                <SolidColorBrush x:Key="WatermarkBrush" Color="#FFAAAAAA"/>
+                                                            </Grid.Resources>
+                                                            <VisualStateManager.VisualStateGroups>
+                                                                <VisualStateGroup x:Name="WatermarkStates">
+                                                                    <VisualState x:Name="Unwatermarked"/>
+                                                                    <VisualState x:Name="Watermarked">
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_Watermark"/>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                </VisualStateGroup>
+                                                            </VisualStateManager.VisualStateGroups>
+                                                            <Border x:Name="Border" 
+                                                                    Background="Transparent" 
+                                                                    BorderBrush="Transparent" 
+                                                                    BorderThickness="0">
+                                                                <Grid>
+                                                                    <ContentControl x:Name="PART_Watermark" 
+                                                                                    Content="Enddatum auswählen" 
+                                                                        Foreground="#FFAAAAAA" 
+                                                                                    IsHitTestVisible="False" 
+                                                                                    Opacity="0"
+                                                                                    VerticalAlignment="Center"
+                                                                                    Margin="5,0,0,0"/>
+                                                                        <ScrollViewer x:Name="PART_ContentHost" 
+                                                                                  VerticalAlignment="Center"
+                                                                                  Margin="5,0,0,0"/>
+                                                                </Grid>
+                                                            </Border>
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DatePicker.Resources>
+                                </DatePicker>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>

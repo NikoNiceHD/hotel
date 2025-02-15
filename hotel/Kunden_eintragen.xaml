@@ -85,42 +85,123 @@
                      BorderThickness="1"
                      Padding="5"/>
 
-            <!-- DatePicker für Geburtsdatum -->
-            <StackPanel HorizontalAlignment="Left" Margin="390,79,0,0" VerticalAlignment="Top" Orientation="Horizontal">
-                <Label x:Name="label_geburtstag" 
-                       Content="Datum eintragen" 
-                       Foreground="White" 
-                       VerticalAlignment="Center" 
-                       Margin="0,0,5,0"/>
-                <DatePicker x:Name="datepicker_geburtstag" 
-                            Width="40"
-                            SelectedDateChanged="DatePicker_SelectedDateChanged">
-                    <DatePicker.Resources>
-                        <Style TargetType="DatePickerTextBox">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </Style>
-                    </DatePicker.Resources>
-                </DatePicker>
-            </StackPanel>
+            
+            <DatePicker x:Name="datepicker_geburtstag" 
+            HorizontalAlignment="Left" 
+            Margin="390,79,0,0" 
+            VerticalAlignment="Top"
+            Width="120"
+            Foreground="#2967FF"
+            Background="#272B2F"
+            BorderBrush="#2967FF"
+            >
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#2967FF"/>
+                        <!-- Textfarbe -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DatePickerTextBox">
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <SolidColorBrush x:Key="WatermarkBrush" Color="#FFAAAAAA"/>
+                                        </Grid.Resources>
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="WatermarkStates">
+                                                <VisualState x:Name="Unwatermarked"/>
+                                                <VisualState x:Name="Watermarked">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_Watermark"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Border x:Name="Border" 
+                                    Background="Transparent" 
+                                    BorderBrush="Transparent" 
+                                    BorderThickness="0">
+                                            <Grid>
+                                                <ContentControl x:Name="PART_Watermark" 
+                                                    Content="Geburtsdatum" 
+                                                    Foreground="#FFAAAAAA" 
+                                                    IsHitTestVisible="False" 
+                                                    Opacity="0"
+                                                    VerticalAlignment="Center"
+                                                    Margin="5,0,0,0"/>
+                                                <ScrollViewer x:Name="PART_ContentHost" 
+                                                  VerticalAlignment="Center"
+                                                  Margin="5,0,0,0"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>
 
             <!-- DatePicker für Einzugsdatum -->
-            <StackPanel HorizontalAlignment="Left" Margin="216,238,0,0" VerticalAlignment="Top" Orientation="Horizontal">
-                <Label x:Name="label_einzugsdatum" 
-                       Content="Datum eintragen" 
-                       Foreground="White" 
-                       />
-                <DatePicker x:Name="datepicker_einzugsdatum" 
-                            Width="46"
-                            SelectedDateChanged="DatePicker_SelectedDateChanged">
-                    <DatePicker.Resources>
-                        <Style TargetType="{x:Type DatePickerTextBox}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </Style>
-                    </DatePicker.Resources>
-                    
-                </DatePicker>
-            </StackPanel>
-
+            <DatePicker x:Name="datepicker_einzugsdatum" 
+            HorizontalAlignment="Left" 
+            Margin="216,238,0,0" 
+            VerticalAlignment="Top"
+            Width="120"
+            Foreground="#2967FF"
+            Background="#272B2F"
+            BorderBrush="#2967FF"
+            >
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#2967FF"/>
+                        <!-- Textfarbe -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DatePickerTextBox">
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <SolidColorBrush x:Key="WatermarkBrush" Color="#FFAAAAAA"/>
+                                        </Grid.Resources>
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="WatermarkStates">
+                                                <VisualState x:Name="Unwatermarked"/>
+                                                <VisualState x:Name="Watermarked">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_Watermark"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Border x:Name="Border" 
+                                    Background="Transparent" 
+                                    BorderBrush="Transparent" 
+                                    BorderThickness="0">
+                                            <Grid>
+                                                <ContentControl x:Name="PART_Watermark" 
+                                                    Content="Einzugsdatum" 
+                                                    Foreground="#FFAAAAAA" 
+                                                    IsHitTestVisible="False" 
+                                                    Opacity="0"
+                                                    VerticalAlignment="Center"
+                                                    Margin="5,0,0,0"/>
+                                                <ScrollViewer x:Name="PART_ContentHost" 
+                                                  VerticalAlignment="Center"
+                                                  Margin="5,0,0,0"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>
             <!-- Labels -->
             <Label Content="Vorname" 
                    HorizontalAlignment="Left" 

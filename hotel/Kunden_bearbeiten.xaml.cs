@@ -2,7 +2,6 @@
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using MySqlConnector;
 
 namespace hotel
@@ -11,13 +10,14 @@ namespace hotel
     {
         string connectstring = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
         private DataTable dataTable;
-        private string baseQuery = @"SELECT kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, 
-                                   adresse.strasse, adresse.plz, kunde_hat_adresse.datum AS Einzugsdatum, 
-                                   plz.ort 
-                                   FROM kunde 
-                                   INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id 
-                                   INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id 
-                                   INNER JOIN plz ON plz.plz = adresse.plz";
+        private string baseQuery = @"
+            SELECT kunde.id, kunde.vorname, kunde.nachname, kunde.geburtsdatum, 
+                   adresse.strasse, adresse.plz, kunde_hat_adresse.datum AS Einzugsdatum, 
+                   plz.ort 
+            FROM kunde 
+            INNER JOIN kunde_hat_adresse ON kunde_hat_adresse.kunden_id = kunde.id 
+            INNER JOIN adresse ON kunde_hat_adresse.adress_id = adresse.id 
+            INNER JOIN plz ON plz.plz = adresse.plz";
 
         public Kunden_bearbeiten()
         {
@@ -100,22 +100,35 @@ namespace hotel
                             {
                                 if (row.RowState == DataRowState.Modified) // Nur geänderte Zeilen berücksichtigen
                                 {
-                                    string updateQuery = @"
-                                        UPDATE azanik.kunde 
+                                    // Kundendaten aktualisieren
+                                    string updateKundeQuery = @"
+                                        UPDATE kunde 
                                         SET vorname = @vorname, 
                                             nachname = @nachname, 
                                             geburtsdatum = @geburtsdatum 
                                         WHERE id = @id";
 
-                                    using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn, transaction))
+                                    using (MySqlCommand cmd = new MySqlCommand(updateKundeQuery, conn, transaction))
                                     {
-                                        // Parameter hinzufügen
                                         cmd.Parameters.AddWithValue("@vorname", row["vorname"]);
                                         cmd.Parameters.AddWithValue("@nachname", row["nachname"]);
                                         cmd.Parameters.AddWithValue("@geburtsdatum", row["geburtsdatum"]);
                                         cmd.Parameters.AddWithValue("@id", row["id"]);
+                                        cmd.ExecuteNonQuery();
+                                    }
 
-                                        // SQL-Befehl ausführen
+                                    // Adressdaten aktualisieren
+                                    string updateAdresseQuery = @"
+                                        UPDATE adresse 
+                                        SET strasse = @strasse, 
+                                            plz = @plz 
+                                        WHERE id = (SELECT adress_id FROM kunde_hat_adresse WHERE kunden_id = @id)";
+
+                                    using (MySqlCommand cmd = new MySqlCommand(updateAdresseQuery, conn, transaction))
+                                    {
+                                        cmd.Parameters.AddWithValue("@strasse", row["strasse"]);
+                                        cmd.Parameters.AddWithValue("@plz", row["plz"]);
+                                        cmd.Parameters.AddWithValue("@id", row["id"]);
                                         cmd.ExecuteNonQuery();
                                     }
                                 }

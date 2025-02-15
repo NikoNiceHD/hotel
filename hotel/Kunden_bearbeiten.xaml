@@ -17,30 +17,49 @@
         <Border Width="10" Background="#1a1c21" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
         <Grid Margin="10">
-            <!-- Suchfeld -->
-            <TextBox x:Name="searchTextBox" 
-                     Height="30" 
-                     VerticalAlignment="Top"  
-                     TextChanged="searchTextBox_TextChanged"
-                     Background="#272B2F"
-                     Foreground="White"
-                     BorderBrush="#2967FF"
-                     BorderThickness="1"
-                     Padding="5"
-                     Margin="10,10,10,0">
-                <TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="CaretBrush" Value="White"/>
-                        <Setter Property="SelectionBrush" Value="#2967FF"/>
-                        <Setter Property="SelectionTextBrush" Value="White"/>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            <!-- Suchfeld mit Platzhalter -->
+            <Grid Margin="10,10,10,0" VerticalAlignment="Top">
+                <TextBox x:Name="searchTextBox" 
+                         Height="30" 
+                         TextChanged="searchTextBox_TextChanged"
+                         Background="#272B2F"
+                         Foreground="White"
+                         BorderBrush="#2967FF"
+                         BorderThickness="1"
+                         Padding="5">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="CaretBrush" Value="White"/>
+                            <Setter Property="SelectionBrush" Value="#2967FF"/>
+                            <Setter Property="SelectionTextBrush" Value="White"/>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <!-- Platzhaltertext -->
+                <TextBlock IsHitTestVisible="False" 
+                           Text="Suche nach Kunden..." 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           Margin="10,0,0,0" 
+                           Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=searchTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
             <!-- DataGrid zur Anzeige und Bearbeitung der Kundendaten -->
             <DataGrid x:Name="dtgrid" 
                       Margin="10,50,10,60" 
-                      AutoGenerateColumns="True" 
+                      AutoGenerateColumns="False" 
                       ItemsSource="{Binding}"
                       Background="#272B2F"
                       Foreground="White"
@@ -93,6 +112,18 @@
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
+
+                <!-- Spalten -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Vorname" Binding="{Binding vorname}"/>
+                    <DataGridTextColumn Header="Nachname" Binding="{Binding nachname}"/>
+                    <DataGridTextColumn Header="Geburtsdatum" Binding="{Binding geburtsdatum, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                    <DataGridTextColumn Header="Straße" Binding="{Binding strasse}"/>
+                    <DataGridTextColumn Header="PLZ" Binding="{Binding plz}"/>
+                    <DataGridTextColumn Header="Ort" Binding="{Binding ort}"/>
+                    <DataGridTextColumn Header="Einzugsdatum" Binding="{Binding Einzugsdatum, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                </DataGrid.Columns>
             </DataGrid>
 
             <!-- Button zum Speichern der Änderungen -->

@@ -39,5 +39,10 @@ namespace hotel
         {
             main.Content = new Buchung_1();
         }
+
+        private void btn_rechnung(object sender, RoutedEventArgs e)
+        {
+            main.Content = new Rechnung_1();
+        }
     }
 }

@@ -28,54 +28,126 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="131,150,0,0" VerticalAlignment="Top">
                 <!-- Überschrift -->
                 <Label Content="Startdatum" Foreground="White"/>
-                <!-- Zeile mit DatePicker und Label zur Anzeige des Datums -->
-                <StackPanel Orientation="Horizontal">
-                    <!-- Label, das das ausgewählte Datum anzeigt (Format dd.MM.yyyy) -->
-                    <Label x:Name="label_start" 
-                           Foreground="White"
-                           Content="Datum eintragen"/>
-                    <!-- DatePicker, dessen TextBox ausgeblendet ist -->
-                    <DatePicker x:Name="datepicker_start" Width="40"
-                                Background="#272B2F"
-                                Foreground="White"
-                                BorderBrush="#2967FF"
-                                BorderThickness="1"
-                                Padding="5"
-                                SelectedDateChanged="DatePicker_SelectedDateChanged">
-                        <DatePicker.Resources>
-                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </Style>
-                        </DatePicker.Resources>
-                    </DatePicker>
-                </StackPanel>
+                <!-- DatePicker mit Platzhalter -->
+                <DatePicker x:Name="datepicker_start" 
+                            Width="120"
+                            Background="#272B2F"
+                            Foreground="#2967FF"
+                            BorderBrush="#2967FF"
+                            BorderThickness="1"
+                            Padding="5"
+                            >
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="#2967FF"/>
+                            <!-- Textfarbe -->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DatePickerTextBox">
+                                        <Grid>
+                                            <Grid.Resources>
+                                                <SolidColorBrush x:Key="WatermarkBrush" Color="#FFAAAAAA"/>
+                                            </Grid.Resources>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="WatermarkStates">
+                                                    <VisualState x:Name="Unwatermarked"/>
+                                                    <VisualState x:Name="Watermarked">
+                                                        <Storyboard>
+                                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_Watermark"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <Border x:Name="Border" 
+                                                    Background="Transparent" 
+                                                    BorderBrush="Transparent" 
+                                                    BorderThickness="0">
+                                                <Grid>
+                                                    <ContentControl x:Name="PART_Watermark" 
+                                                                    Content="Startdatum auswählen" 
+                                                        Foreground="#FFAAAAAA" 
+                                                                    IsHitTestVisible="False" 
+                                                                    Opacity="0"
+                                                                    VerticalAlignment="Center"
+                                                                    Margin="5,0,0,0"/>
+                                                        <ScrollViewer x:Name="PART_ContentHost" 
+                                                                  VerticalAlignment="Center"
+                                                                  Margin="5,0,0,0"/>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
             </StackPanel>
 
             <!-- Bereich für Enddatum -->
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="510,150,0,0" VerticalAlignment="Top">
                 <!-- Überschrift -->
                 <Label Content="Enddatum" Foreground="White"/>
-                <!-- Zeile mit DatePicker und Label zur Anzeige des Datums -->
-                <StackPanel Orientation="Horizontal">
-                    <!-- Label, das das ausgewählte Datum anzeigt (Format dd.MM.yyyy) -->
-                    <Label x:Name="label_ende" 
-                           Foreground="White"
-                           Content="Datum eintragen"/>
-                    <!-- DatePicker, dessen TextBox ausgeblendet ist -->
-                    <DatePicker x:Name="datepicker_ende" Width="40"
-                                Background="#272B2F"
-                                Foreground="White"
-                                BorderBrush="#2967FF"
-                                BorderThickness="1"
-                                Padding="5"
-                                SelectedDateChanged="DatePicker_SelectedDateChanged">
-                        <DatePicker.Resources>
-                            <Style TargetType="{x:Type DatePickerTextBox}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </Style>
-                        </DatePicker.Resources>
-                    </DatePicker>
-                </StackPanel>
+                <!-- DatePicker mit Platzhalter -->
+                <DatePicker x:Name="datepicker_ende" 
+                            Width="120"
+                            Background="#272B2F"
+                            Foreground="#2967FF"
+                            BorderBrush="#2967FF"
+                            BorderThickness="1"
+                            Padding="5"
+                            >
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="#2967FF"/>
+                            <!-- Textfarbe -->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DatePickerTextBox">
+                                        <Grid>
+                                            <Grid.Resources>
+                                                <SolidColorBrush x:Key="WatermarkBrush" Color="#FFAAAAAA"/>
+                                            </Grid.Resources>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="WatermarkStates">
+                                                    <VisualState x:Name="Unwatermarked"/>
+                                                    <VisualState x:Name="Watermarked">
+                                                        <Storyboard>
+                                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_Watermark"/>
+                                                        </Storyboard>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <Border x:Name="Border" 
+                                                    Background="Transparent" 
+                                                    BorderBrush="Transparent" 
+                                                    BorderThickness="0">
+                                                <Grid>
+                                                    <ContentControl x:Name="PART_Watermark" 
+                                                                    Content="Enddatum auswählen"
+                                                        Foreground="#FFAAAAAA" 
+                                                                    IsHitTestVisible="False" 
+                                                                    Opacity="0"
+                                                                    VerticalAlignment="Center"
+                                                                    Margin="5,0,0,0"/>
+                                                        <ScrollViewer x:Name="PART_ContentHost" 
+                                                                  VerticalAlignment="Center"
+                                                                  Margin="5,0,0,0"/>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
             </StackPanel>
 
             <!-- Button zum Erstellen der Buchung -->

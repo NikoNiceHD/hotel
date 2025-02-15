@@ -6,35 +6,60 @@ using MySqlConnector;
 
 namespace hotel
 {
-    /// <summary>
-    /// Interaktionslogik für Zimmer_einsehen.xaml
-    /// </summary>
     public partial class Zimmer_einsehen : Page
     {
         string connectstring = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
-        private DataTable dataTable;
 
         public Zimmer_einsehen()
         {
             InitializeComponent();
-            
-            LoadData(@"SELECT zimmer.id, zimmer.gebaeude_id
-                       FROM zimmer
-                       INNER JOIN gebaeude ON zimmer.gebaeude_id = gebaeude.id;");
+            LoadZimmerData(); // Lade die Daten beim Initialisieren der Seite
         }
 
-        
-        private void LoadData(string query)
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Lade die Daten, wenn das Datum geändert wird
+            LoadZimmerData();
+        }
+
+        private void LoadZimmerData()
         {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectstring))
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    dataTable = new DataTable();
-                    dataTable.Load(cmd.ExecuteReader());
-                    dtgrid.DataContext = dataTable; 
+
+                    // Hole das ausgewählte Datum aus dem DatePicker
+                    DateTime selectedDate = datePicker.SelectedDate ?? DateTime.Today;
+
+                    // Query für freie Zimmer
+                    string queryFreieZimmer = @"
+                        SELECT z.id, z.gebaeude_id 
+                        FROM zimmer z
+                        LEFT JOIN buchung b ON z.id = b.zimmer_id AND b.datum = @selectedDate
+                        WHERE b.id IS NULL";
+
+                    // Query für belegte Zimmer
+                    string queryBelegteZimmer = @"
+                        SELECT DISTINCT z.id, z.gebaeude_id 
+                        FROM zimmer z
+                        INNER JOIN buchung b ON z.id = b.zimmer_id
+                        WHERE b.datum = @selectedDate";
+
+                    // Lade freie Zimmer
+                    MySqlCommand cmdFreie = new MySqlCommand(queryFreieZimmer, conn);
+                    cmdFreie.Parameters.AddWithValue("@selectedDate", selectedDate.ToString("yyyy-MM-dd"));
+                    DataTable dtFreie = new DataTable();
+                    dtFreie.Load(cmdFreie.ExecuteReader());
+                    dtgridFreieZimmer.ItemsSource = dtFreie.DefaultView;
+
+                    // Lade belegte Zimmer
+                    MySqlCommand cmdBelegte = new MySqlCommand(queryBelegteZimmer, conn);
+                    cmdBelegte.Parameters.AddWithValue("@selectedDate", selectedDate.ToString("yyyy-MM-dd"));
+                    DataTable dtBelegte = new DataTable();
+                    dtBelegte.Load(cmdBelegte.ExecuteReader());
+                    dtgridBelegteZimmer.ItemsSource = dtBelegte.DefaultView;
                 }
             }
             catch (Exception ex)
