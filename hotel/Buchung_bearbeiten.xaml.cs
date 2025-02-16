@@ -30,23 +30,34 @@ namespace hotel
                     connection.Open();
 
                     string query = @"
-                    SELECT buchung.id AS 'Buchungs-ID', 
-                           buchung.datum AS 'Datum', 
-                           buchung.rechnung_id AS 'Rechnungs-ID', 
-                           buchung.zimmer_id AS 'Zimmer-ID',
-                           COALESCE(kunde.vorname, 'Unbekannt') AS 'Kunden-Vorname', 
-                           COALESCE(kunde.nachname, 'Unbekannt') AS 'Kunden-Nachname'
-                    FROM buchung
-                    LEFT JOIN rechnung ON buchung.rechnung_id = rechnung.id
-                    LEFT JOIN kunde ON rechnung.kunden_id = kunde.id
-                    ORDER BY buchung.id;";
+    SELECT buchung.id AS 'Buchungs-ID', 
+           DATE_FORMAT(buchung.datum, '%d.%m.%Y') AS 'Datum', 
+           buchung.rechnung_id AS 'Rechnungs-ID', 
+           buchung.zimmer_id AS 'Zimmer-ID',
+           COALESCE(kunde.vorname, 'Unbekannt') AS 'Kunden-Vorname', 
+           COALESCE(kunde.nachname, 'Unbekannt') AS 'Kunden-Nachname'
+    FROM buchung
+    LEFT JOIN rechnung ON buchung.rechnung_id = rechnung.id
+    LEFT JOIN kunde ON rechnung.kunden_id = kunde.id
+    ORDER BY buchung.id;";
+                    
 
                     MySqlCommand cmd = new MySqlCommand(query, connection);
 
                     DataTable dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
 
-                    buchungenDataView = dataTable.DefaultView; 
+                    
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        if (row["Datum"] != DBNull.Value)
+                        {
+                            DateTime datum = Convert.ToDateTime(row["Datum"]);
+                            row["Datum"] = datum.ToString("dd.MM.yyyy");
+                        }
+                    }
+
+                    buchungenDataView = dataTable.DefaultView;
                     buchungenDataGrid.ItemsSource = buchungenDataView;
                 }
                 catch (Exception ex)
