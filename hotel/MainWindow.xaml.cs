@@ -24,5 +24,25 @@ namespace hotel
         {
             InitializeComponent();
         }
+
+        private void btn_kunden(object sender, RoutedEventArgs e)
+        {
+            main.Content = new Kunden();
+        }
+
+        private void btn_zimmer(object sender, RoutedEventArgs e)
+        {
+            main.Content = new Zimmer();
+        }
+
+        private void btn_buchung(object sender, RoutedEventArgs e)
+        {
+            main.Content = new Buchung_1();
+        }
+
+        private void btn_rechnung(object sender, RoutedEventArgs e)
+        {
+            main.Content = new Rechnung_1();
+        }
     }
 }
