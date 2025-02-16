@@ -9,10 +9,10 @@ using System.Windows.Media;
 using MySqlConnector;
 
 namespace hotel
-{ 
+{
     public partial class Buchung_3 : Page
     {
-        
+
         private int kundenID;
         private DateTime startDatum;
         private DateTime endDatum;
@@ -20,10 +20,10 @@ namespace hotel
 
         private string connectionString = "server=drip-tuxedo.eu;uid=azanik;pwd=Fortnite6969!;database=azanik";
 
-        
+
         private List<int> ausgewaehlteZimmer = new List<int>();
 
-        
+
         public Buchung_3(int kundenID, DateTime startDatum, DateTime endDatum)
         {
 
@@ -32,12 +32,12 @@ namespace hotel
             this.startDatum = startDatum;
             this.endDatum = endDatum;
 
-            
+
             kundenIDTextBlock.Text = $"Kunden-ID: {kundenID}";
             startDatumTextBlock.Text = $"Startdatum: {startDatum.ToString("dd.MM.yyyy")}"; // Europäisches Format
             endDatumTextBlock.Text = $"Enddatum: {endDatum.ToString("dd.MM.yyyy")}";     // Europäisches Format
 
-           
+
             LadeVerfuegbareZimmer();
             LadeLeistungen();
         }
@@ -74,16 +74,16 @@ namespace hotel
                     {
                         if (value < BuchungStartDatum)
                         {
-                            
+
                             MessageBox.Show($"Das Startdatum der Zusatzleistung '{LeistungName}' darf nicht vor dem {BuchungStartDatum.ToString("dd.MM.yyyy")} liegen!",
                                 "Ungültiges Startdatum", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-                            value = BuchungStartDatum; 
+                            value = BuchungStartDatum;
                         }
 
                         _startDatum = value;
                         OnPropertyChanged(nameof(StartDatum));
-                        OnPropertyChanged(nameof(StartDatumLabel)); 
+                        OnPropertyChanged(nameof(StartDatumLabel));
                     }
                 }
             }
@@ -97,7 +97,7 @@ namespace hotel
                     {
                         _endDatum = value;
                         OnPropertyChanged(nameof(EndDatum));
-                        OnPropertyChanged(nameof(EndDatumLabel)); 
+                        OnPropertyChanged(nameof(EndDatumLabel));
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace hotel
             public DateTime BuchungStartDatum { get; set; }
             public DateTime BuchungEndDatum { get; set; }
 
-            
+
             public string StartDatumLabel => StartDatum.ToString("dd.MM.yyyy");
             public string EndDatumLabel => EndDatum.ToString("dd.MM.yyyy");
 
@@ -118,7 +118,7 @@ namespace hotel
         }
 
 
-        
+
         private void LadeVerfuegbareZimmer()
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -161,7 +161,7 @@ namespace hotel
                 }
                 finally
                 {
-                   
+
                     if (connection.State == System.Data.ConnectionState.Open)
                     {
                         connection.Close();
@@ -170,7 +170,7 @@ namespace hotel
             }
         }
 
-       
+
         private void LadeLeistungen()
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -183,23 +183,23 @@ namespace hotel
                     DataTable dataTable = new DataTable();
                     dataTable.Load(cmd.ExecuteReader());
 
-                    
+
                     List<LeistungViewModel> leistungen = new List<LeistungViewModel>();
 
                     foreach (DataRow row in dataTable.Rows)
                     {
-                        DateTime leistungStart = startDatum; 
-                        DateTime leistungEnd = endDatum;     
+                        DateTime leistungStart = startDatum;
+                        DateTime leistungEnd = endDatum;
 
-                        
+
                         if (leistungStart < startDatum)
                         {
-                            
+
                             string startDatumFormatiert = startDatum.ToString("dd.MM.yyyy");
                             MessageBox.Show($"Das Startdatum der Zusatzleistung '{row["leistung"]}' darf nicht vor dem {startDatumFormatiert} liegen!",
                                 "Ungültiges Startdatum", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-                            leistungStart = startDatum; 
+                            leistungStart = startDatum;
                         }
 
                         leistungen.Add(new LeistungViewModel
@@ -207,7 +207,7 @@ namespace hotel
                             LeistungID = Convert.ToInt32(row["id"]),
                             LeistungName = row["leistung"].ToString(),
                             Preis = Convert.ToDecimal(row["preis"]),
-                            IsSelected = false, 
+                            IsSelected = false,
                             StartDatum = leistungStart,
                             EndDatum = leistungEnd,
                             BuchungStartDatum = startDatum,
@@ -215,7 +215,7 @@ namespace hotel
                         });
                     }
 
-                    
+
                     leistungenListView.ItemsSource = leistungen;
                 }
                 catch (Exception ex)
@@ -235,10 +235,10 @@ namespace hotel
 
         private void ZimmerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           
+
             ausgewaehlteZimmer.Clear();
 
-           
+
             try
             {
                 foreach (DataRowView selectedRow in zimmerDataGrid.SelectedItems)
@@ -253,34 +253,34 @@ namespace hotel
             }
         }
 
-        
+
         private void ZimmerAuswaehlen_Click(object sender, RoutedEventArgs e)
         {
             if (ausgewaehlteZimmer.Count > 0)
             {
-                
+
                 foreach (LeistungViewModel leistung in leistungenListView.ItemsSource)
                 {
                     if (leistung.IsSelected && leistung.EndDatum > endDatum)
                     {
                         MessageBox.Show($"Das Enddatum der Zusatzleistung '{leistung.LeistungName}' darf nicht nach dem {endDatum.ToShortDateString()} liegen!",
                             "Ungültiges Enddatum", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return; 
+                        return;
                     }
                 }
 
-                
+
                 int rechnungsID = ErstelleRechnung(startDatum, endDatum);
 
                 if (rechnungsID > 0)
                 {
-                    
+
                     List<int> buchungsIDs = new List<int>();
 
-                    
+
                     foreach (int zimmernummer in ausgewaehlteZimmer)
                     {
-                       
+
                         for (DateTime datum = startDatum; datum <= endDatum; datum = datum.AddDays(1))
                         {
                             int buchungID = erstelleBuchung(zimmernummer, rechnungsID, datum);
@@ -292,11 +292,10 @@ namespace hotel
                         }
                     }
 
-                    
+
                     SpeichereLeistungen(rechnungsID);
 
-                    MessageBox.Show($"{buchungsIDs.Count} Buchungen erfolgreich erstellt!",
-                        "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+
                 }
                 else
                 {
@@ -311,7 +310,7 @@ namespace hotel
         }
 
 
-        
+
         private void SpeichereLeistungen(int rechnungsID)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -324,7 +323,7 @@ namespace hotel
                     {
                         if (leistung.IsSelected)
                         {
-                            
+
                             string getBuchungenQuery = @"
                         SELECT id, datum 
                         FROM buchung 
@@ -338,7 +337,7 @@ namespace hotel
 
                             List<int> buchungsIDs = new List<int>();
 
-                            
+
                             using (MySqlDataReader reader = getBuchungenCmd.ExecuteReader())
                             {
                                 while (reader.Read())
@@ -348,7 +347,7 @@ namespace hotel
                                 }
                             }
 
-                          
+
                             foreach (int buchungID in buchungsIDs)
                             {
                                 string insertLeistungQuery = @"
@@ -358,7 +357,7 @@ namespace hotel
                                 MySqlCommand insertLeistungCmd = new MySqlCommand(insertLeistungQuery, connection);
                                 insertLeistungCmd.Parameters.AddWithValue("@buchungID", buchungID);
                                 insertLeistungCmd.Parameters.AddWithValue("@leistungID", leistung.LeistungID);
-                                insertLeistungCmd.Parameters.AddWithValue("@anzahl", 1); 
+                                insertLeistungCmd.Parameters.AddWithValue("@anzahl", 1);
 
                                 insertLeistungCmd.ExecuteNonQuery();
                             }
@@ -372,7 +371,7 @@ namespace hotel
             }
         }
 
-        
+
         private int ErstelleRechnung(DateTime startDatum, DateTime endDatum)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -408,7 +407,7 @@ namespace hotel
             }
         }
 
-      
+
         private int erstelleBuchung(int zimmernummer, int rechnungsID, DateTime datum)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -417,7 +416,7 @@ namespace hotel
                 {
                     connection.Open();
 
-                   
+
                     string checkBuchungQuery = @"
                 SELECT COUNT(*) 
                 FROM buchung 
@@ -431,18 +430,18 @@ namespace hotel
 
                     if (anzahlBuchungen > 0)
                     {
-                       
+
                         MessageBox.Show($"Das Zimmer {zimmernummer} ist am {datum.ToShortDateString()} bereits gebucht.",
                             "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return -1;
                     }
 
-                    
+
                     using (MySqlTransaction transaction = connection.BeginTransaction())
                     {
                         try
                         {
-                            
+
                             string insertBuchungQuery = @"
                         INSERT INTO buchung (datum, rechnung_id, zimmer_id)
                         VALUES (@datum, @rechnungsID, @zimmernummer);
@@ -453,21 +452,20 @@ namespace hotel
                             buchungCmd.Parameters.AddWithValue("@rechnungsID", rechnungsID);
                             buchungCmd.Parameters.AddWithValue("@zimmernummer", zimmernummer);
 
-                            
+
                             int buchungID = Convert.ToInt32(buchungCmd.ExecuteScalar());
 
-                            
+
                             transaction.Commit();
 
-                            
-                            MessageBox.Show($"Buchung für Zimmer {zimmernummer} am {datum.ToShortDateString()} erfolgreich erstellt. Buchungs-ID: {buchungID}",
-                                "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
 
                             return buchungID;
                         }
                         catch (Exception ex)
                         {
-                            
+
                             transaction.Rollback();
                             MessageBox.Show($"Fehler beim Buchen des Zimmers {zimmernummer} am {datum.ToShortDateString()}: {ex.Message}",
                                 "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -488,12 +486,12 @@ namespace hotel
         {
             if (sender is DatePicker datePicker)
             {
-               
+
                 var listViewItem = FindAncestor<ListViewItem>(datePicker);
                 if (listViewItem == null)
                     return;
 
-               
+
                 Label label = null;
                 if (datePicker.Name == "fernsehen_anfang")
                 {
@@ -504,17 +502,17 @@ namespace hotel
                     label = FindChild<Label>(listViewItem, "label_fernsehen_ende");
                 }
 
-                
+
                 if (label != null)
                 {
                     label.Content = datePicker.SelectedDate.HasValue
-                        ? datePicker.SelectedDate.Value.ToString("dd.MM.yyyy") 
+                        ? datePicker.SelectedDate.Value.ToString("dd.MM.yyyy")
                         : "Datum eintragen";
                 }
             }
         }
 
-        
+
         private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
         {
             while (current != null && !(current is T))
@@ -524,7 +522,7 @@ namespace hotel
             return current as T;
         }
 
-        
+
         private static T FindChild<T>(DependencyObject parent, string childName) where T : FrameworkElement
         {
             if (parent == null) return null;

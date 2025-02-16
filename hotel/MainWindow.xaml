@@ -128,16 +128,15 @@
             <Frame x:Name="main" Margin="140,0,0,0"/>
 
 
-           <!--
-            <TextBlock Text="Willkommen beim Hotel Willike"
+
+            <TextBlock
                        Foreground="#FF2967FF"
-                       FontSize="32
-"
+                       FontSize="32 "
                        FontWeight="Bold"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Top"
-                       Margin="330,10,0,0"/>
-            -->
+                       Margin="10,0,0,0"><Run Text="Hotel "/><LineBreak/><Run Text="Willeke"/></TextBlock>
+
         </Grid>
     </Border>
 </Window>
